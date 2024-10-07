@@ -1,6 +1,6 @@
 export interface User {
     uid: string; // Identifiant unique généré par Firebase Auth
-    role: "chef_de_chantier" | "responsable"; // Rôle de l'utilisateur
+    role: "Chef de chantier" | "Responsable"; // Rôle de l'utilisateur
     name: string; // Nom de l'utilisateur
     email: string; // Email de l'utilisateur
     assignedChantiers: string[]; // Liste des chantiers assignés au chef de chantier
@@ -11,7 +11,7 @@ export interface Chantier {
     id: string; // Identifiant unique du chantier
     title: string; // Titre du chantier
     description: string; // Description du chantier
-    status: "non_realise" | "en_cours" | "interrompu" | "termine"; // Statut actuel
+    status: "Non réalise" | "En cours" | "Interrompu" | "Terminé"; // Statut actuel
     startDate: Date; // Date de début du chantier
     duration: number; // Durée en demi-journées
     location: string; // Lieu du chantier
@@ -30,21 +30,14 @@ export interface Vehicle {
     id: string; // Identifiant unique du véhicule
     model: string; // Modèle du véhicule
     availability: Date[]; // Disponibilité du véhicule
-    status: "disponible" | "en_maintenance" | "en_utilisation"; // Statut du véhicule
-}
-
-export interface Vehicle {
-    id: string; // Identifiant unique du véhicule
-    model: string; // Modèle du véhicule
-    availability: Date[]; // Disponibilité du véhicule
-    status: "disponible" | "en_maintenance" | "en_utilisation"; // Statut du véhicule
+    status: "disponible" | "En maintenance" | "En utilisation"; // Statut du véhicule
 }
 
 export interface Material {
     id: string; // Identifiant unique du matériel
     name: string; // Nom du matériel
     quantity: number; // Quantité disponible
-    status: "disponible" | "en_utilisation" | "en_reparation"; // Statut du matériel
+    status: "Disponible" | "En utilisation" | "En reparation"; // Statut du matériel
 }
 
 export interface Anomaly {
