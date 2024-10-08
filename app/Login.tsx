@@ -1,6 +1,7 @@
+import { Input, InputField } from "@/components/ui/input";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"; // Import specific methods
 import React, { useState } from "react";
-import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Button, Text, View } from "react-native";
 import { FIREBASE_AUTH } from "../config/firebaseConfig"; // Import Firebase Auth instance
 
 export default function () {
@@ -30,50 +31,23 @@ export default function () {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>{isLogin ? "Login" : "Sign Up"}</Text>
+        <View className="flex items-center justify-center h-full p-5 bg-white">
+            <Text className="text-4xl font-bold text-center">Bonjour 👋</Text>
 
-            <TextInput placeholder="Email" value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" style={styles.input} />
+            <Input variant="outline" size="xl" isDisabled={false} isInvalid={false} isReadOnly={false}>
+                <InputField placeholder="Login" />
+            </Input>
 
-            <TextInput placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
+            <Input variant="outline" size="xl" isDisabled={false} isInvalid={false} isReadOnly={false}>
+                <InputField placeholder="Mot de passe" />
+            </Input>
 
             <Button title={isLogin ? "Login" : "Sign Up"} onPress={handleAuthAction} />
 
-            <Text style={styles.switchText}>
+            <Text>
                 {isLogin ? "Need an account? " : "Already have an account? "}
-                <Text style={styles.switchLink} onPress={() => setIsLogin(!isLogin)}>
-                    {isLogin ? "Sign Up" : "Login"}
-                </Text>
+                <Text onPress={() => setIsLogin(!isLogin)}>{isLogin ? "Sign Up" : "Login"}</Text>
             </Text>
         </View>
     );
-};
-
-// Style definitions
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "center",
-        paddingHorizontal: 20,
-    },
-    title: {
-        fontSize: 24,
-        marginBottom: 20,
-        textAlign: "center",
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: "#ccc",
-        padding: 10,
-        marginBottom: 10,
-        borderRadius: 5,
-    },
-    switchText: {
-        marginTop: 20,
-        textAlign: "center",
-    },
-    switchLink: {
-        color: "blue",
-        fontWeight: "bold",
-    },
-});
+}
