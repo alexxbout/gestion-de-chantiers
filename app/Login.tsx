@@ -1,39 +1,46 @@
 import { Box } from "@/components/ui/box";
-import { EyeIcon, EyeOffIcon } from "@/components/ui/icon";
+import { FormControl, FormControlError, FormControlErrorIcon, FormControlErrorText } from "@/components/ui/form-control";
+import { AlertCircleIcon, EyeIcon, EyeOffIcon } from "@/components/ui/icon";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"; // Import specific methods
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
-import { FIREBASE_AUTH } from "../config/firebaseConfig"; // Import Firebase Auth instance
+import { FIREBASE_AUTH } from "../config/firebaseConfig";
 
 export default function () {
-    // Define state with TypeScript types
-    const [email, setEmail] = useState<string>(""); // Email must be a string
-    const [password, setPassword] = useState<string>(""); // Password must be a string
-    const [isLogin, setIsLogin] = useState<boolean>(true); // Boolean to toggle login/signup
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
 
-    // Show/hide password
+    const [isInvalid, setInvalid] = useState<boolean>(false);
+    const [isLogin, setIsLogin] = useState<boolean>(true);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [showPassword, setShowPassword] = useState<boolean>(false);
+
+    const isButtonDisabled = email.length === 0 || password.length === 0;
+
     const handleState = () => {
         setShowPassword((showState) => {
             return !showState;
         });
     };
 
-    // Handle authentication actions
     const handleAuthAction = async () => {
         try {
+            setErrorMessage(null);
+            setInvalid(false);
             if (isLogin) {
-                // Logging in a user
-                const cred = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
-                console.log(cred);
+                const credentials = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
+                console.log("Login successful:", credentials);
+                Alert.alert("Connexion réussie", "Vous êtes connecté.");
             } else {
-                // Registering a new user
-                await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
+                const credentials = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
+                console.log("Registration successful:", credentials);
+                Alert.alert("Inscription réussie", "Votre compte a été créé.");
             }
         } catch (error: any) {
-            // Type 'error' as 'any' to access 'message'
-            Alert.alert("Error:", error.message);
+            setErrorMessage(error.message);
+            setInvalid(true);
+            console.error("Error during authentication:", error.message);
         }
     };
 
@@ -41,27 +48,31 @@ export default function () {
         <View className="flex items-center justify-center h-full p-10 bg-white gap-y-20">
             <Text className="text-4xl font-bold text-center">Bonjour 👋</Text>
 
-            <Box className="flex flex-col items-center justify-center w-full gap-y-5">
+            <FormControl className="flex flex-col items-center justify-center w-full gap-y-5" isInvalid={isInvalid}>
                 <Box className="flex flex-col w-full gap-y-2">
                     <Text className="text-gray-500">Email</Text>
-                    <Input className="w-full" variant="outline" size="xl" isDisabled={false} isInvalid={false} isReadOnly={false}>
-                        <InputField placeholder="Email" />
+                    <Input className="w-full" variant="outline" size="xl">
+                        <InputField placeholder="Email" onChangeText={(text) => setEmail(text)} />
                     </Input>
                 </Box>
-
                 <Box className="flex flex-col w-full gap-y-2">
                     <Text className="text-gray-500">Mot de passe</Text>
-                    <Input className="w-full" variant="outline" size="xl" isDisabled={false} isInvalid={false} isReadOnly={false}>
-                        <InputField type={showPassword ? "text" : "password"} placeholder="Mot de passe" />
+                    <Input className="w-full" variant="outline" size="xl">
+                        <InputField type={showPassword ? "text" : "password"} placeholder="Mot de passe" onChangeText={(text) => setPassword(text)} />
                         <InputSlot className="pr-2" onPress={handleState}>
                             <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} size="md" />
                         </InputSlot>
                     </Input>
                 </Box>
-            </Box>
+
+                <FormControlError>
+                    <FormControlErrorIcon as={AlertCircleIcon} />
+                    <FormControlErrorText>{errorMessage}</FormControlErrorText>
+                </FormControlError>
+            </FormControl>
 
             <Box className="flex flex-col w-full gap-y-5">
-                <Pressable onPress={handleAuthAction} className="p-3 bg-black rounded-md">
+                <Pressable onPress={handleAuthAction} className={isButtonDisabled ? "p-3 bg-gray-300 rounded-md" : "p-3 bg-black rounded-md"} disabled={isButtonDisabled}>
                     <Text className="text-xl font-semibold text-center text-white">{isLogin ? "Connexion" : "S'enregistrer"}</Text>
                 </Pressable>
 

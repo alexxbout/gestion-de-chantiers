@@ -7,7 +7,6 @@ export default function RootLayout() {
         <GluestackUIProvider mode="light">
             <Stack initialRouteName="login" screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="login" />
-                <Stack.Screen name="index" />
             </Stack>
         </GluestackUIProvider>
     );
