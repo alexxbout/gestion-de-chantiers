@@ -1,7 +1,9 @@
-import { Input, InputField } from "@/components/ui/input";
+import { Box } from "@/components/ui/box";
+import { EyeIcon, EyeOffIcon } from "@/components/ui/icon";
+import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"; // Import specific methods
 import React, { useState } from "react";
-import { Alert, Button, Text, View } from "react-native";
+import { Alert, Pressable, Text, View } from "react-native";
 import { FIREBASE_AUTH } from "../config/firebaseConfig"; // Import Firebase Auth instance
 
 export default function () {
@@ -9,6 +11,14 @@ export default function () {
     const [email, setEmail] = useState<string>(""); // Email must be a string
     const [password, setPassword] = useState<string>(""); // Password must be a string
     const [isLogin, setIsLogin] = useState<boolean>(true); // Boolean to toggle login/signup
+
+    // Show/hide password
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const handleState = () => {
+        setShowPassword((showState) => {
+            return !showState;
+        });
+    };
 
     // Handle authentication actions
     const handleAuthAction = async () => {
@@ -31,23 +41,40 @@ export default function () {
     };
 
     return (
-        <View className="flex items-center justify-center h-full p-5 bg-white">
+        <View className="flex items-center justify-center h-full p-10 bg-white gap-y-20">
             <Text className="text-4xl font-bold text-center">Bonjour 👋</Text>
 
-            <Input variant="outline" size="xl" isDisabled={false} isInvalid={false} isReadOnly={false}>
-                <InputField placeholder="Login" />
-            </Input>
+            <Box className="flex flex-col items-center justify-center w-full gap-y-5">
+                <Box className="flex flex-col w-full gap-y-2">
+                    <Text className="text-gray-500">Email</Text>
+                    <Input className="w-full" variant="outline" size="xl" isDisabled={false} isInvalid={false} isReadOnly={false}>
+                        <InputField placeholder="Email" />
+                    </Input>
+                </Box>
 
-            <Input variant="outline" size="xl" isDisabled={false} isInvalid={false} isReadOnly={false}>
-                <InputField placeholder="Mot de passe" />
-            </Input>
+                <Box className="flex flex-col w-full gap-y-2">
+                    <Text className="text-gray-500">Mot de passe</Text>
+                    <Input className="w-full" variant="outline" size="xl" isDisabled={false} isInvalid={false} isReadOnly={false}>
+                        <InputField type={showPassword ? "text" : "password"} placeholder="Mot de passe" />
+                        <InputSlot className="pr-2" onPress={handleState}>
+                            <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} size="md" />
+                        </InputSlot>
+                    </Input>
+                </Box>
+            </Box>
 
-            <Button title={isLogin ? "Login" : "Sign Up"} onPress={handleAuthAction} />
+            <Box className="flex flex-col w-full gap-y-5">
+                <Pressable onPress={handleAuthAction} className="p-3 bg-black rounded-md">
+                    <Text className="text-xl font-semibold text-center text-white">{isLogin ? "Connexion" : "S'enregistrer"}</Text>
+                </Pressable>
 
-            <Text>
-                {isLogin ? "Need an account? " : "Already have an account? "}
-                <Text onPress={() => setIsLogin(!isLogin)}>{isLogin ? "Sign Up" : "Login"}</Text>
-            </Text>
+                <Text className="text-center">
+                    {isLogin ? "Vous n'avez pas de compte ? " : "Déjà un compte ? "}
+                    <Text className="font-bold text-blue-600" onPress={() => setIsLogin(!isLogin)}>
+                        {isLogin ? "S'enregistrer" : "Se connecter"}
+                    </Text>
+                </Text>
+            </Box>
         </View>
     );
 }
