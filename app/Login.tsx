@@ -27,12 +27,9 @@ export default function () {
                 // Logging in a user
                 const cred = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
                 console.log(cred);
-
-                Alert.alert("Logged in successfully");
             } else {
                 // Registering a new user
                 await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
-                Alert.alert("User registered successfully");
             }
         } catch (error: any) {
             // Type 'error' as 'any' to access 'message'
