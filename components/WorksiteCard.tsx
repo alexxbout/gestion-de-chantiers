@@ -1,4 +1,5 @@
 import { Badge, BadgeIcon, BadgeText } from "@/components/ui/badge";
+import { BadgeAction } from "@/types/components";
 import { Chantier } from "@/types/database";
 import { Pressable, Text } from "react-native";
 import { Box } from "./ui/box";
@@ -11,14 +12,6 @@ interface Props {
     description: string;
     startDate: string;
     status: Chantier["status"];
-}
-
-enum BadgeAction {
-    ERROR = "error",
-    WARNING = "warning",
-    SUCCESS = "success",
-    INFO = "info",
-    MUTED = "muted",
 }
 
 export default function Header(props: Props) {
