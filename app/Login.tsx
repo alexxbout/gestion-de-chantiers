@@ -2,15 +2,21 @@ import { Box } from "@/components/ui/box";
 import { FormControl, FormControlError, FormControlErrorIcon, FormControlErrorText } from "@/components/ui/form-control";
 import { AlertCircleIcon, EyeIcon, EyeOffIcon } from "@/components/ui/icon";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
+import { RootStackParamList } from "@/types/navigation";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation } from "expo-router";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import { FIREBASE_AUTH } from "../config/firebaseConfig";
 
+type LoginNavigationProp = StackNavigationProp<RootStackParamList, "login">;
+
 export default function () {
+    const navigation = useNavigation<LoginNavigationProp>();
+
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-
     const [isInvalid, setInvalid] = useState<boolean>(false);
     const [isLogin, setIsLogin] = useState<boolean>(true);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -37,10 +43,12 @@ export default function () {
                 console.log("Registration successful:", credentials);
                 Alert.alert("Inscription réussie", "Votre compte a été créé.");
             }
+
+            navigation.navigate("app");
         } catch (error: any) {
             setErrorMessage(error.message);
             setInvalid(true);
-            console.error("Error during authentication:", error.message);
+            console.error("Error during {}:{}", isLogin ? "authentication" : "registration" , error.message);
         }
     };
 
