@@ -28,7 +28,7 @@ export default function Header(props: Props) {
             <Text className="font-light text-gray-400">{formattedStartDate}</Text>
 
             <Box className="flex flex-row items-center justify-between">
-                <Badge size="md" action={action} className="rounded-sm w-max">
+                <Badge size="lg" action={action} className="rounded-sm w-max">
                     <BadgeText>{text}</BadgeText>
                     <BadgeIcon as={icon} className="ml-2" />
                 </Badge>

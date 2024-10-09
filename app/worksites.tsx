@@ -5,7 +5,7 @@ import { View } from "react-native";
 
 export default function () {
     return (
-        <View className="flex flex-col h-full bg-white p-7 gap-y-10">
+        <View className="flex flex-col h-full pt-20 bg-white p-7 gap-y-10">
             <Header title="Chantiers" />
 
             <VStack space="lg">
