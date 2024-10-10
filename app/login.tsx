@@ -2,13 +2,13 @@ import { Box } from "@/components/ui/box";
 import { FormControl, FormControlError, FormControlErrorIcon, FormControlErrorText } from "@/components/ui/form-control";
 import { AlertCircleIcon, EyeIcon, EyeOffIcon } from "@/components/ui/icon";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
+import { FIREBASE_AUTH } from "@/config/firebaseConfig";
 import { RootStackParamList } from "@/types/navigation";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "expo-router";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
-import { FIREBASE_AUTH } from "../config/firebaseConfig";
 
 type LoginNavigationProp = StackNavigationProp<RootStackParamList, "login">;
 
