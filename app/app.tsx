@@ -38,6 +38,17 @@ export default function () {
                 tabBarLabel: ({ focused, color }) => {
                     return <Text style={{ color: focused ? "blue" : "gray" }}>{route.name}</Text>;
                 },
+                headerTitleAlign: "left",
+                headerTitleStyle: {
+                    color: "black",
+                    fontSize: 30,
+                    fontWeight: "600"
+                },
+                headerStyle: {
+                    backgroundColor: "white",
+                    borderWidth: 0,
+                    borderBottomWidth: 0,
+                }
             })}>
             <Tab.Screen name="Chantiers" component={worksites} />
             <Tab.Screen name="Calendrier" component={calendar} />

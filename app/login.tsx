@@ -8,7 +8,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "expo-router";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
-import { Alert, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 type LoginNavigationProp = StackNavigationProp<RootStackParamList, "login">;
 
@@ -35,20 +35,18 @@ export default function () {
             setErrorMessage(null);
             setInvalid(false);
             if (isLogin) {
-                const credentials = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
-                console.log("Login successful:", credentials);
-                Alert.alert("Connexion réussie", "Vous êtes connecté.");
+                await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
+                console.log("Login successful");
             } else {
-                const credentials = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
-                console.log("Registration successful:", credentials);
-                Alert.alert("Inscription réussie", "Votre compte a été créé.");
+                await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
+                console.log("Registration successful");
             }
 
             navigation.navigate("app");
         } catch (error: any) {
             setErrorMessage(error.message);
             setInvalid(true);
-            console.error("Error during {}:{}", isLogin ? "authentication" : "registration" , error.message);
+            console.error("Error during {}:{}", isLogin ? "authentication" : "registration", error.message);
         }
     };
 

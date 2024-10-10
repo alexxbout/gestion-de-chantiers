@@ -22,7 +22,7 @@ export default function Header(props: Props) {
     const formattedStartDate = startDate.toLocaleDateString("fr-FR", options);
 
     return (
-        <Pressable onPress={() => console.log("Hello")} className="flex flex-col p-2 bg-white border border-gray-400 rounded-md gap-y-2">
+        <Pressable onPress={() => console.log("Hello")} className="flex flex-col px-3 py-2 bg-white border border-gray-300 rounded-lg gap-y-2">
             <Text className="text-xl font-semibold">{props.title}</Text>
             <Text className="font-light text-gray-400">{props.description}</Text>
             <Text className="font-light text-gray-400">{formattedStartDate}</Text>

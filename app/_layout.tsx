@@ -5,6 +5,7 @@ import { Stack } from "expo-router";
 import { onAuthStateChanged, User } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
+import "../gesture-handler";
 
 export default function RootLayout() {
     const [initializing, setInitializing] = useState(true);
@@ -14,7 +15,7 @@ export default function RootLayout() {
         console.log("Checking auth state...");
         const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
             if (user) {
-                console.log("User is logged in:", user);
+                console.log("User is logged in");
                 setUser(user);
             } else {
                 console.log("No user logged in");
