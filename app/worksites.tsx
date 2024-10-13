@@ -9,6 +9,24 @@ export default function Worksites() {
                 <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="En cours" />
                 <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="Interrompu" />
                 <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="Terminé" />
+                <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="En cours" />
+                <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="Interrompu" />
+                <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="Terminé" />
+                <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="En cours" />
+                <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="Interrompu" />
+                <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="Terminé" />
+                <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="En cours" />
+                <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="Interrompu" />
+                <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="Terminé" />
+                <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="En cours" />
+                <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="Interrompu" />
+                <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="Terminé" />
+                <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="En cours" />
+                <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="Interrompu" />
+                <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="Terminé" />
+                <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="En cours" />
+                <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="Interrompu" />
+                <WorksiteCard id={1} title="Chantier 1" description="Description du chantier 1" startDate="01/01/2022" status="Terminé" />
             </VStack>
         </ScrollView>
     );
