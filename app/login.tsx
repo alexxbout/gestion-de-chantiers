@@ -12,7 +12,7 @@ import { Pressable, Text, View } from "react-native";
 
 type LoginNavigationProp = StackNavigationProp<RootStackParamList, "login">;
 
-export default function Login() {
+export const Login = () => {
     const navigation = useNavigation<LoginNavigationProp>();
 
     const [email, setEmail] = useState<string>("");

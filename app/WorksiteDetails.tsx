@@ -8,6 +8,6 @@ type Props = {
     navigation: WorksiteDetailsNavigationProp;
 };
 
-export default function WorksiteDetails() {
+export const WorksiteDetails = () => {
     const navigation = useNavigation<WorksiteDetailsNavigationProp>();
 }

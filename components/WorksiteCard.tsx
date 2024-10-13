@@ -14,7 +14,7 @@ interface Props {
     status: Chantier["status"];
 }
 
-export default function Header(props: Props) {
+export const WorksiteCard = (props: Props) => {
     const { action, icon, text } = getStatusStyles(props.status);
 
     const startDate = new Date(props.startDate);
