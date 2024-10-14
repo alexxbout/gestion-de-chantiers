@@ -29,6 +29,9 @@ const navigate = (name: string, params?: object) => {
 const Tabs = createBottomTabNavigator({
     tabBarStyle: { position: "absolute" },
     tabBarBackground: () => <BlurView tint="light" intensity={100} style={StyleSheet.absoluteFill} />,
+    tabBarOptions: {
+        labelPosition: "below-icon",
+    },
     screens: {
         worksites: {
             screen: Worksites,
