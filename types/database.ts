@@ -7,11 +7,18 @@ export interface User {
     photoURL?: string; // URL de la photo de profil (facultatif)
 }
 
+export enum WorksiteStatus {
+    NOT_STARTED = "Non réalisé",
+    IN_PROGRESS = "En cours",
+    INTERRUPTED = "Interrompu",
+    COMPLETED = "Terminé",
+}
+
 export interface Chantier {
     id: string; // Identifiant unique du chantier
     title: string; // Titre du chantier
     description: string; // Description du chantier
-    status: "Non réalise" | "En cours" | "Interrompu" | "Terminé"; // Statut actuel
+    status: WorksiteStatus; // Statut actuel
     startDate: Date; // Date de début du chantier
     duration: number; // Durée en demi-journées
     location: string; // Lieu du chantier

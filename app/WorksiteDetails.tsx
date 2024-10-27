@@ -1,13 +1,14 @@
 import { RootStackParamList } from "@/types/navigation";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useNavigation } from "expo-router";
+import { View } from "react-native";
 
-type WorksiteDetailsNavigationProp = StackNavigationProp<RootStackParamList, "worksite_details">;
+type NavigationProp = StackNavigationProp<RootStackParamList, "worksiteDetails">;
 
-type Props = {
-    navigation: WorksiteDetailsNavigationProp;
-};
+// type Props = {
+//     navigation: NavigationProp;
+//     route: { params: { id: string } };
+// }
 
 export const WorksiteDetails = () => {
-    const navigation = useNavigation<WorksiteDetailsNavigationProp>();
-}
+    return <View></View>;
+};

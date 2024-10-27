@@ -1,20 +1,20 @@
 import { Badge, BadgeIcon, BadgeText } from "@/components/ui/badge";
 import { BadgeAction } from "@/types/components";
-import { Chantier } from "@/types/database";
+import { RootStackParamList, WorksiteProp } from "@/types/navigation";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation } from "expo-router";
 import { Pressable, Text } from "react-native";
 import { Box } from "./ui/box";
 import { Button, ButtonIcon, ButtonText } from "./ui/button";
 import { AlertCircleIcon, ArrowRightIcon, CheckIcon, ClockIcon, InfoIcon } from "./ui/icon";
 
-interface Props {
-    id: number;
-    title: string;
-    description: string;
-    startDate: string;
-    status: Chantier["status"];
-}
+type NavigationProp = StackNavigationProp<RootStackParamList, "worksiteCard">;
+// type RoutingProp = RouteProp<RootStackParamList, "worksiteCard">;
 
-export const WorksiteCard = (props: Props) => {
+export const WorksiteCard = (props: WorksiteProp) => {
+    const navigation = useNavigation<NavigationProp>();
+    // const route = useNavigation<RoutingProp>();
+
     const { action, icon, text } = getStatusStyles(props.status);
 
     const startDate = new Date(props.startDate);
@@ -22,7 +22,7 @@ export const WorksiteCard = (props: Props) => {
     const formattedStartDate = startDate.toLocaleDateString("fr-FR", options);
 
     return (
-        <Pressable onPress={() => console.log("Hello")} className="flex flex-col px-3 py-2 bg-white border border-gray-300 rounded-lg gap-y-2">
+        <Pressable onPress={() => navigation.navigate("worksiteDetails", { id: props.id })} className="flex flex-col px-3 py-2 bg-white border border-gray-300 rounded-lg gap-y-2">
             <Text className="text-xl font-semibold">{props.title}</Text>
             <Text className="font-light text-gray-400">{props.description}</Text>
             <Text className="font-light text-gray-400">{formattedStartDate}</Text>
@@ -40,7 +40,7 @@ export const WorksiteCard = (props: Props) => {
             </Box>
         </Pressable>
     );
-}
+};
 
 const getStatusStyles = (status: string): { action: BadgeAction; icon: React.ElementType; text: string } => {
     switch (status) {
