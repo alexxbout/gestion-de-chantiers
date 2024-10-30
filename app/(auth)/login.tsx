@@ -12,7 +12,7 @@ import { Pressable, Text, View } from "react-native";
 
 type LoginNavigationProp = StackNavigationProp<RootStackParamList, "login">;
 
-export const Login = () => {
+const Login = () => {
     const navigation = useNavigation<LoginNavigationProp>();
 
     const [email, setEmail] = useState<string>("");
@@ -25,9 +25,7 @@ export const Login = () => {
     const isButtonDisabled = email.length === 0 || password.length === 0;
 
     const handleState = () => {
-        setShowPassword((showState) => {
-            return !showState;
-        });
+        setShowPassword((showState) => !showState);
     };
 
     const handleAuthAction = async () => {
@@ -46,7 +44,7 @@ export const Login = () => {
         } catch (error: any) {
             setErrorMessage(error.message);
             setInvalid(true);
-            console.error("Error during {}:{}", isLogin ? "authentication" : "registration", error.message);
+            console.error("Error during authentication:", error.message);
         }
     };
 
@@ -91,4 +89,6 @@ export const Login = () => {
             </Box>
         </View>
     );
-}
+};
+
+export default Login;

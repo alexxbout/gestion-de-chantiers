@@ -4,14 +4,14 @@ export type RootStackParamList = {
     home: undefined;
     login: undefined;
     app: undefined;
-    worksiteCard: WorksiteProp;
-    worksiteDetails: { id: number };
+    worksite_card: WorksiteProp;
+    worksite_details: { id: number };
 };
 
 export type WorksiteProp = {
     id: number;
     title: string;
     description: string;
-    startDate: string;
+    start_date: string;
     status: Chantier["status"];
 };

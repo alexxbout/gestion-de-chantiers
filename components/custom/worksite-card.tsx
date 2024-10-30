@@ -1,31 +1,22 @@
 import { Badge, BadgeIcon, BadgeText } from "@/components/ui/badge";
+import { Box } from "@/components/ui/box";
+import { AlertCircleIcon, ArrowRightIcon, CheckIcon, ClockIcon, InfoIcon } from "@/components/ui/icon";
 import { BadgeAction } from "@/types/components";
-import { RootStackParamList, WorksiteProp } from "@/types/navigation";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { WorksiteProp } from "@/types/navigation";
 import { useNavigation } from "expo-router";
 import { Pressable, Text } from "react-native";
-import { Box } from "./ui/box";
-import { Button, ButtonIcon, ButtonText } from "./ui/button";
-import { AlertCircleIcon, ArrowRightIcon, CheckIcon, ClockIcon, InfoIcon } from "./ui/icon";
+import { Button, ButtonIcon, ButtonText } from "../ui/button";
 
-type NavigationProp = StackNavigationProp<RootStackParamList, "worksiteCard">;
-// type RoutingProp = RouteProp<RootStackParamList, "worksiteCard">;
-
-export const WorksiteCard = (props: WorksiteProp) => {
-    const navigation = useNavigation<NavigationProp>();
-    // const route = useNavigation<RoutingProp>();
+const WorksiteCard = (props: WorksiteProp) => {
+    const navigation = useNavigation();
 
     const { action, icon, text } = getStatusStyles(props.status);
-
-    const startDate = new Date(props.startDate);
-    const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" };
-    const formattedStartDate = startDate.toLocaleDateString("fr-FR", options);
 
     return (
         <Pressable onPress={() => navigation.navigate("worksiteDetails", { id: props.id })} className="flex flex-col px-3 py-2 bg-white border border-gray-300 rounded-lg gap-y-2">
             <Text className="text-xl font-semibold">{props.title}</Text>
             <Text className="font-light text-gray-400">{props.description}</Text>
-            <Text className="font-light text-gray-400">{formattedStartDate}</Text>
+            <Text className="font-light text-gray-400">{formatDate(props.start_date)}</Text>
 
             <Box className="flex flex-row items-center justify-between">
                 <Badge size="lg" action={action} className="rounded-sm w-max">
@@ -76,3 +67,10 @@ const getStatusStyles = (status: string): { action: BadgeAction; icon: React.Ele
             };
     }
 };
+
+const formatDate = (date: string) => {
+    const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" };
+    return new Date(date).toLocaleDateString("fr-FR", options);
+};
+
+export default WorksiteCard;
