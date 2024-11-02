@@ -13,7 +13,6 @@ const WorksiteCard = (props: WorksiteProp) => {
     const { action, icon, text } = getStatusStyles(props.status);
 
     const showInfo = (id: number) => {
-        console.log("Navigating to worksite info");
         router.push({ pathname: `/worksites/info/[id]`, params: { id: id.toString() } });
     }
 
@@ -29,7 +28,7 @@ const WorksiteCard = (props: WorksiteProp) => {
                     <BadgeIcon as={icon} className="ml-2" />
                 </Badge>
 
-                <Button size="md" variant="link" action="primary">
+                <Button onPress={() => showInfo(props.id)} size="md" variant="link" action="primary">
                     <ButtonText>Voir les détails</ButtonText>
                     <ButtonIcon as={ArrowRightIcon} />
                 </Button>
