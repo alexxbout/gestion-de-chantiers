@@ -5,7 +5,7 @@ import { onAuthStateChanged, User } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
 
-export default function AuthLayout() {
+const AuthLayout = () => {
     const [initializing, setInitializing] = useState<boolean>(true);
     const [user, setUser] = useState<User | null>(null);
 
@@ -31,3 +31,5 @@ export default function AuthLayout() {
         </Stack>
     );
 }
+
+export default AuthLayout;

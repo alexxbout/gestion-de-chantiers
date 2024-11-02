@@ -3,17 +3,22 @@ import { Box } from "@/components/ui/box";
 import { AlertCircleIcon, ArrowRightIcon, CheckIcon, ClockIcon, InfoIcon } from "@/components/ui/icon";
 import { BadgeAction } from "@/types/components";
 import { WorksiteProp } from "@/types/navigation";
-import { useNavigation } from "expo-router";
+import { useRouter } from "expo-router";
 import { Pressable, Text } from "react-native";
 import { Button, ButtonIcon, ButtonText } from "../ui/button";
 
 const WorksiteCard = (props: WorksiteProp) => {
-    const navigation = useNavigation();
+    const router = useRouter();
 
     const { action, icon, text } = getStatusStyles(props.status);
 
+    const showInfo = (id: number) => {
+        console.log("Navigating to worksite info");
+        router.push({ pathname: `/worksites/info/[id]`, params: { id: id.toString() } });
+    }
+
     return (
-        <Pressable onPress={() => navigation.navigate("worksiteDetails", { id: props.id })} className="flex flex-col px-3 py-2 bg-white border border-gray-300 rounded-lg gap-y-2">
+        <Pressable onPress={() => showInfo(props.id)} className="flex flex-col px-3 py-2 bg-white border border-gray-300 rounded-lg gap-y-2">
             <Text className="text-xl font-semibold">{props.title}</Text>
             <Text className="font-light text-gray-400">{props.description}</Text>
             <Text className="font-light text-gray-400">{formatDate(props.start_date)}</Text>
