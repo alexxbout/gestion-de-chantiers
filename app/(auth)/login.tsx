@@ -40,7 +40,7 @@ const Login = () => {
                 console.log("Registration successful");
             }
 
-            navigation.navigate("app");
+            navigation.replace("home");
         } catch (error: any) {
             setErrorMessage(error.message);
             setInvalid(true);

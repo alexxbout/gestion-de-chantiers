@@ -1,4 +1,4 @@
-import { Chantier } from "./database";
+import { WorksiteStatus } from "./database";
 
 export type RootStackParamList = {
     home: undefined;
@@ -13,5 +13,5 @@ export type WorksiteProp = {
     title: string;
     description: string;
     start_date: string;
-    status: Chantier["status"];
+    status: WorksiteStatus;
 };

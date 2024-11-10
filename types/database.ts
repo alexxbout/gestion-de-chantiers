@@ -29,8 +29,8 @@ export interface Chantier {
     vehicles: string[]; // Liste des identifiants des véhicules nécessaires
     materials: string[]; // Liste des identifiants des matériels nécessaires
     team: string[]; // Liste des identifiants des membres de l'équipe
-    anomalies?: Anomaly[]; // Liste des anomalies signalées
-    photos?: Photo[]; // Liste des photos du chantier
+    defects?: Defect[]; // Liste des anomalies signalées
+    pictures?: Picture[]; // Liste des photos du chantier
 }
 
 export interface Vehicle {
@@ -47,17 +47,17 @@ export interface Material {
     status: "Disponible" | "En utilisation" | "En reparation"; // Statut du matériel
 }
 
-export interface Anomaly {
+export interface Defect {
     id: string; // Identifiant unique de l'anomalie
-    message: string; // Description de l'anomalie
-    date: Date; // Date de signalement
+    description: string; // Description de l'anomalie
+    date: string; // Date de signalement
     reportedBy: string; // Utilisateur ayant signalé l'anomalie
 }
 
-export interface Photo {
+export interface Picture {
     id: string; // Identifiant unique de la photo
     url: string; // URL de la photo stockée
     description?: string; // Description de la photo (facultatif)
     uploadedBy: string; // Identifiant de l'utilisateur ayant uploadé la photo
-    date: Date; // Date d'upload
+    date: string; // Date d'upload
 }
