@@ -51,7 +51,7 @@ const Layout = () => {
                         <View className="flex gap-y-5">
                             <Text className="text-2xl text-black">Anomalies</Text>
 
-                            <DefectCard id="1" date="2023-04-24" description="Une anomalie" reportedBy="Alexandre Boutinaud" />
+                            <DefectCard id={1} date="2023-04-24" description="Une anomalie" reportedBy="Alexandre Boutinaud" />
                         </View>
 
                         <View className="flex gap-y-5">

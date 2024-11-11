@@ -11,19 +11,19 @@ const Layout = () => {
 
     const defects: Defect[] = [
         {
-            id: "1",
+            id: 1,
             description: "Fortes intempéries",
             date: "2024-06-03",
             reportedBy: "Alexandre Boutinaud",
         },
         {
-            id: "2",
+            id: 2,
             description: "Panne de matériel",
             date: "2024-06-03",
             reportedBy: "Alexandre Boutinaud",
         },
         {
-            id: "3",
+            id: 3,
             description: "Absence d'électricité",
             date: "2024-06-03",
             reportedBy: "Alexandre Boutinaud",
