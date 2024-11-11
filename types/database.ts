@@ -3,7 +3,7 @@ export interface User {
     role: "Chef de chantier" | "Responsable"; // Rôle de l'utilisateur
     name: string; // Nom de l'utilisateur
     email: string; // Email de l'utilisateur
-    assignedChantiers: string[]; // Liste des chantiers assignés au chef de chantier
+    assignedChantiers: number[]; // Liste des chantiers assignés au chef de chantier
     photoURL?: string; // URL de la photo de profil (facultatif)
 }
 
@@ -14,8 +14,8 @@ export enum WorksiteStatus {
     COMPLETED = "Terminé",
 }
 
-export interface Chantier {
-    id: string; // Identifiant unique du chantier
+export interface Worksite {
+    id: number; // Identifiant unique du chantier
     title: string; // Titre du chantier
     description: string; // Description du chantier
     status: WorksiteStatus; // Statut actuel
@@ -34,28 +34,28 @@ export interface Chantier {
 }
 
 export interface Vehicle {
-    id: string; // Identifiant unique du véhicule
+    id: number; // Identifiant unique du véhicule
     model: string; // Modèle du véhicule
     availability: Date[]; // Disponibilité du véhicule
     status: "disponible" | "En maintenance" | "En utilisation"; // Statut du véhicule
 }
 
 export interface Material {
-    id: string; // Identifiant unique du matériel
+    id: number; // Identifiant unique du matériel
     name: string; // Nom du matériel
     quantity: number; // Quantité disponible
     status: "Disponible" | "En utilisation" | "En reparation"; // Statut du matériel
 }
 
 export interface Defect {
-    id: string; // Identifiant unique de l'anomalie
+    id: number; // Identifiant unique de l'anomalie
     description: string; // Description de l'anomalie
     date: string; // Date de signalement
     reportedBy: string; // Utilisateur ayant signalé l'anomalie
 }
 
 export interface Picture {
-    id: string; // Identifiant unique de la photo
+    id: number; // Identifiant unique de la photo
     url: string; // URL de la photo stockée
     description?: string; // Description de la photo (facultatif)
     uploadedBy: string; // Identifiant de l'utilisateur ayant uploadé la photo

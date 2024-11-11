@@ -1,7 +1,9 @@
 import WorksiteCard from "@/components/custom/worksite-card";
 import { WorksiteStatus } from "@/types/database";
 import { WorksiteProp } from "@/types/navigation";
-import { ScrollView, View } from "react-native";
+import SegmentedControl, { NativeSegmentedControlIOSChangeEvent } from "@react-native-segmented-control/segmented-control";
+import { useState } from "react";
+import { NativeSyntheticEvent, ScrollView, View } from "react-native";
 
 const Tab = () => {
     // TODO: Load worksites from the database
@@ -36,10 +38,32 @@ const Tab = () => {
         },
     ];
 
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [value, setValue] = useState("Unselected");
+    const [segmentedValues, setSegmentedValues] = useState(["Tous", "En cours", "Terminés", "Interrompus"]);
+
+    const handleIndexChange = (event: NativeSyntheticEvent<NativeSegmentedControlIOSChangeEvent>) => {
+        setSelectedIndex(event.nativeEvent.selectedSegmentIndex);
+    };
+
+    const handleOnValueChange = (value: string) => {
+        setValue(value);
+    };
+
+    const filteredWorksites = worksites.filter((worksite) => {
+        if (selectedIndex === 0) return true; // Tous
+        if (selectedIndex === 1) return worksite.status === WorksiteStatus.IN_PROGRESS; // En cours
+        if (selectedIndex === 2) return worksite.status === WorksiteStatus.COMPLETED; // Terminés
+        if (selectedIndex === 3) return worksite.status === WorksiteStatus.INTERRUPTED; // Interrompus
+        return false;
+    });
+
     return (
         <ScrollView className="h-full p-6 bg-white">
             <View className="flex flex-col pb-10 bg-white gap-y-8">
-                {worksites.map((worksite, index) => (
+                <SegmentedControl values={segmentedValues} selectedIndex={selectedIndex} onChange={handleIndexChange} />
+
+                {filteredWorksites.map((worksite, index) => (
                     <WorksiteCard key={index} id={worksite.id} title={worksite.title} description={worksite.description} start_date={worksite.start_date} status={worksite.status} />
                 ))}
             </View>
