@@ -61,7 +61,7 @@ const Tab = () => {
     return (
         <ScrollView className="h-full p-6 bg-white">
             <View className="flex flex-col pb-10 bg-white gap-y-8">
-                <SegmentedControl values={segmentedValues} selectedIndex={selectedIndex} onChange={handleIndexChange} />
+                <SegmentedControl values={segmentedValues} selectedIndex={selectedIndex} onChange={handleIndexChange} appearance="light" />
 
                 {filteredWorksites.map((worksite, index) => (
                     <WorksiteCard key={index} id={worksite.id} title={worksite.title} description={worksite.description} start_date={worksite.start_date} status={worksite.status} />
