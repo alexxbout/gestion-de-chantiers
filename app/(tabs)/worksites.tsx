@@ -51,10 +51,10 @@ const Tab = () => {
     };
 
     const filteredWorksites = worksites.filter((worksite) => {
-        if (selectedIndex === 0) return true; // Tous
-        if (selectedIndex === 1) return worksite.status === WorksiteStatus.IN_PROGRESS; // En cours
-        if (selectedIndex === 2) return worksite.status === WorksiteStatus.COMPLETED; // Terminés
-        if (selectedIndex === 3) return worksite.status === WorksiteStatus.INTERRUPTED; // Interrompus
+        if (selectedIndex === 0) return true;
+        if (selectedIndex === 1) return worksite.status === WorksiteStatus.IN_PROGRESS;
+        if (selectedIndex === 2) return worksite.status === WorksiteStatus.COMPLETED;
+        if (selectedIndex === 3) return worksite.status === WorksiteStatus.INTERRUPTED;
         return false;
     });
 
