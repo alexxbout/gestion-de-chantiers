@@ -35,10 +35,8 @@ const Login = () => {
             setInvalid(false);
             if (isLogin) {
                 await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
-                console.log("Login successful");
             } else {
                 await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
-                console.log("Registration successful");
             }
 
             navigation.replace("home");

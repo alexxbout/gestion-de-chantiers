@@ -23,8 +23,6 @@ const Layout = () => {
 
     useEffect(() => {
         if (!initializing) {
-            console.log("Current segments:", segments); // Debug: affiche les segments pour vérifier les valeurs
-
             if (!user && segments[0] !== "(auth)") {
                 // Redirection vers login si l'utilisateur n'est pas connecté et qu'il n'est pas sur la route de login
                 router.push("/(auth)/login");

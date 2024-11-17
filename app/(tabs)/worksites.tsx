@@ -39,15 +39,10 @@ const Tab = () => {
     ];
 
     const [selectedIndex, setSelectedIndex] = useState(0);
-    const [value, setValue] = useState("Unselected");
     const [segmentedValues, setSegmentedValues] = useState(["Tous", "En cours", "Terminés", "Interrompus"]);
 
     const handleIndexChange = (event: NativeSyntheticEvent<NativeSegmentedControlIOSChangeEvent>) => {
         setSelectedIndex(event.nativeEvent.selectedSegmentIndex);
-    };
-
-    const handleOnValueChange = (value: string) => {
-        setValue(value);
     };
 
     const filteredWorksites = worksites.filter((worksite) => {
