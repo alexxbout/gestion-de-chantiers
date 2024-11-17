@@ -24,11 +24,10 @@ const Layout = () => {
     useEffect(() => {
         if (!initializing) {
             if (!user && segments[0] !== "(auth)") {
-                // Redirection vers login si l'utilisateur n'est pas connecté et qu'il n'est pas sur la route de login
-                router.push("/(auth)/login");
+                // Remplacez par replace pour éviter d'accumuler l'historique
+                router.replace("/(auth)/login");
             } else if (user && segments[0] === "(auth)") {
-                // Redirection vers worksites si l'utilisateur est connecté et qu'il est sur la route de login
-                router.push("/(tabs)/worksites");
+                router.replace("/(tabs)/worksites");
             }
         }
     }, [user, initializing, segments]);

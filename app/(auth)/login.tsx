@@ -39,7 +39,7 @@ const Login = () => {
                 await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
             }
 
-            navigation.replace("home");
+            navigation.replace("worksites");
         } catch (error: any) {
             setErrorMessage(error.message);
             setInvalid(true);

@@ -6,6 +6,7 @@ export type RootStackParamList = {
     app: undefined;
     worksite_card: WorksiteProp;
     worksite_details: { id: number };
+    worksites: undefined;
 };
 
 export type WorksiteProp = {
