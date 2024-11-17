@@ -4,7 +4,7 @@ import { FIREBASE_AUTH } from "@/config/firebaseConfig";
 import "@/global.css";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { onAuthStateChanged, User } from "firebase/auth";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
 
 const Layout = () => {

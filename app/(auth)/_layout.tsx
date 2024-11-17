@@ -2,7 +2,7 @@ import { Box } from "@/components/ui/box";
 import { FIREBASE_AUTH } from "@/config/firebaseConfig";
 import { Stack } from "expo-router";
 import { onAuthStateChanged, User } from "firebase/auth";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
 
 const AuthLayout = () => {
@@ -30,6 +30,6 @@ const AuthLayout = () => {
             <Stack.Screen name="login" options={{ headerShown: false }} />
         </Stack>
     );
-}
+};
 
 export default AuthLayout;
