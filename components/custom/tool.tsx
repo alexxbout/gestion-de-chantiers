@@ -1,6 +1,7 @@
+import { CategoryEnum } from "@/types/components";
 import { Image } from "../ui/image";
 
-const imagePaths: { tools: { [key: string]: string }; vehicules: { [key: string]: string } } = {
+const imagePaths: { [key in CategoryEnum]: { [key: string]: any } } = {
     tools: {
         brique: require("/assets/images/icones/tools/brique.svg"),
         brouette: require("/assets/images/icones/tools/brouette.svg"),
@@ -18,7 +19,7 @@ const imagePaths: { tools: { [key: string]: string }; vehicules: { [key: string]
         tuyaux: require("/assets/images/icones/tools/tuyaux.svg"),
         vis: require("/assets/images/icones/tools/vis.svg"),
     },
-    vehicules: {
+    vehicles: {
         beton: require("/assets/images/icones/vehicules/beton.svg"),
         camion: require("/assets/images/icones/vehicules/camion.svg"),
         construction: require("/assets/images/icones/vehicules/construction.svg"),
@@ -28,10 +29,10 @@ const imagePaths: { tools: { [key: string]: string }; vehicules: { [key: string]
     },
 };
 
-const Tool = (props: { category: "tools" | "vehicules"; name: string }) => {
-    const imagePath = imagePaths[props.category][props.name];
+const Tool = (props: { category: CategoryEnum; name: string, isLarge?: boolean }) => {
+    const imagePath = imagePaths[props.category as CategoryEnum][props.name];
 
-    return <Image className="w-[30px] h-[30px]" source={imagePath} />;
+    return <Image className={(props.isLarge ? "w-[40px] h-[40px]" : "w-[30px] h-[30px]") } source={imagePath} />;
 };
 
 export default Tool;
