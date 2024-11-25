@@ -16,7 +16,7 @@ const WorksiteCardSmall = (props: WorksiteProp) => {
         <Pressable onPress={() => showInfo(props.id)} className="flex flex-col p-3 rounded-md gap-y-5 bg-card">
             <Text className="text-xl font-semibold text-black">{props.title}</Text>
 
-            <View className="flex flex-row justify-between gap-x-5">
+            <View className="flex flex-row items-end justify-between gap-x-5">
                 <View className="flex w-full gap-y-2 shrink">
                     <Text className="overflow-hidden truncate whitespace-nowrap">{props.description}</Text>
                     <Text>{formatDate(props.start_date)}</Text>
