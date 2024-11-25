@@ -18,6 +18,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        "card": "#F8F8F8",
         primary: {
           0: 'rgb(var(--color-primary-0)/<alpha-value>)',
           50: 'rgb(var(--color-primary-50)/<alpha-value>)',

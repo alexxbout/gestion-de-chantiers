@@ -1,6 +1,6 @@
 export interface User {
     uid: string; // Identifiant unique généré par Firebase Auth
-    role: "Chef de chantier" | "Responsable"; // Rôle de l'utilisateur
+    role: "Chef de chantier" | "Responsable" | "Equipier"; // Rôle de l'utilisateur
     name: string; // Nom de l'utilisateur
     email: string; // Email de l'utilisateur
     assignedChantiers: number[]; // Liste des chantiers assignés au chef de chantier
