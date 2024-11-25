@@ -32,9 +32,9 @@ const UserCircle = (props: { user: User }) => {
 
     return (
         <View className="flex flex-col items-center justify-center gap-y-2">
-            <Image source={{ uri: props.user.photoURL }} className={"rounded-full w-[50px] h-[50px]" + (isLead ? " border-[#FFD400] border-[3px] shadow-[0px_0px_25px_10px_rgba(255,212,0,0.25)]" : "")} />
+            <Image source={{ uri: props.user.photoURL }} className={"rounded-full w-[50px] h-[50px]" + (isLead ? " border-blue-500 border-[3px]" : "")} />
 
-            <Text className={"text-center" + (isLead ? " text-yellow-500 font-semibold" : "")}>{props.user.name.split(" ")[0]}</Text>
+            <Text className={"text-center" + (isLead ? " text-blue-500 font-semibold" : "")}>{props.user.name.split(" ")[0]}</Text>
         </View>
     );
 };
