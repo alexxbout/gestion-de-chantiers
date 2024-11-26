@@ -1,5 +1,4 @@
-import DateTimePicker from "@react-native-community/datetimepicker";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "../ui/box";
 import { FormControl } from "../ui/form-control";
 import { ChevronDownIcon } from "../ui/icon";
@@ -11,7 +10,7 @@ interface CustomFormField {
     key: string;
     label: string;
     placeholder: string;
-    type: "text" | "date" | "select";
+    type: "text" | "select" | "date";
     required: boolean;
     options?: { label: string; value: string }[];
 }
@@ -19,28 +18,41 @@ interface CustomFormField {
 export interface CustomFormProps {
     data: { [key: string]: any };
     fields: CustomFormField[];
+    onFormValuesChange?: (values: { [key: string]: any }) => void;
 }
 
 const CustomForm = (props: CustomFormProps) => {
     const [formValues, setFormValues] = useState<{ [key: string]: any }>(props.data);
 
     const handleInputChange = (key: string, value: any) => {
-        setFormValues({ ...props.data, [key]: value });
+        const updatedValues = { ...formValues, [key]: value };
+        setFormValues(updatedValues);
+        if (props.onFormValuesChange) {
+            props.onFormValuesChange(updatedValues);
+        }
     };
+
+    useEffect(() => {
+        if (props.onFormValuesChange) {
+            props.onFormValuesChange(formValues);
+        }
+    }, []);
 
     return (
         <FormControl className="flex flex-col items-center justify-center w-full gap-y-5">
             {props.fields.map((field) => (
                 <Box key={field.key} className="flex flex-col w-full gap-y-2">
                     <Text className="text-gray-500">{field.label}</Text>
-
                     {(() => {
                         switch (field.type) {
                             case "select":
                                 return field.options ? (
-                                    <Select>
+                                    <Select
+                                        selectedValue={formValues[field.key]}
+                                        onValueChange={(value) => handleInputChange(field.key, value)}
+                                    >
                                         <SelectTrigger variant="outline" size="xl">
-                                            <SelectInput placeholder="Choisir un statut" />
+                                            <SelectInput placeholder={field.placeholder} />
                                             <SelectIcon className="mr-3" as={ChevronDownIcon} />
                                         </SelectTrigger>
                                         <SelectPortal>
@@ -56,22 +68,6 @@ const CustomForm = (props: CustomFormProps) => {
                                         </SelectPortal>
                                     </Select>
                                 ) : null;
-
-                            case "date":
-                                return (
-                                    <DateTimePicker
-                                        testID="dateTimePicker"
-                                        value={new Date(props.data[field.key])}
-                                        mode="date"
-                                        is24Hour={true}
-                                        display="default"
-                                        onChange={(event, selectedDate) => {
-                                            const date = selectedDate || props.data[field.key];
-                                            handleInputChange(field.key, (date instanceof Date ? date : new Date(date)).toISOString().split("T")[0]);
-                                        }}
-                                    />
-                                );
-
                             case "text":
                             default:
                                 return (

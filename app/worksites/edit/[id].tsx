@@ -26,8 +26,8 @@ const Layout = () => {
     const fields: CustomFormProps["fields"] = [
         { key: "title", label: "Titre", placeholder: "Saisir un titre", type: "text", required: true },
         { key: "description", label: "Description", placeholder: "Saisir une description", type: "text", required: true },
-        { key: "start_date", label: "Date de début", placeholder: "Saisir une date de début", type: "date", required: true },
-        { key: "end_date", label: "Date de fin", placeholder: "Saisir une date de fin", type: "date", required: true },
+        { key: "start_date", label: "Date de début", placeholder: "jj/mm/aaaa", type: "text", required: true },
+        { key: "end_date", label: "Date de fin", placeholder: "jj/mm/aaaa", type: "text", required: true },
         { key: "client", label: "Client", placeholder: "Saisir le nom et le prénom du client", type: "text", required: true },
         { key: "status", label: "Statut", placeholder: "Choisir le statut du chantier", type: "select", options: worksiteStatusOptions, required: true },
     ];

@@ -16,15 +16,15 @@ const CategorySelector = (props: { type: CategoryEnum }) => {
         return (
             <Pressable key={tool} className="relative" onPress={() => toggleToolSelection(tool)}>
                 <View className={`${isSelected ? "opacity-100" : "opacity-60"}`}>
-                    <Tool category={props.type} name={tool} isLarge={true} />
+                    <Tool category={props.type} name={tool} isLarge={true} showTitle={true} />
                 </View>
                 {isSelected ? (
-                    <View className="absolute p-1 bg-red-500 rounded-full -top-2 -right-3">
-                        <Icon as={RemoveIcon} className="w-5 h-5 text-white" />
+                    <View className="absolute p-1 bg-red-500 rounded-full -top-1 -right-1">
+                        <Icon as={RemoveIcon} className="w-4 h-4 text-white" />
                     </View>
                 ) : (
-                    <View className="absolute p-1 bg-green-500 rounded-full -top-2 -right-3">
-                        <Icon as={AddIcon} className="w-5 h-5 text-white" />
+                    <View className="absolute p-1 bg-green-500 rounded-full -top-1 -right-1">
+                        <Icon as={AddIcon} className="w-4 h-4 text-white" />
                     </View>
                 )}
             </Pressable>

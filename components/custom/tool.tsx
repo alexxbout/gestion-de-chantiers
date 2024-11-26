@@ -1,5 +1,7 @@
 import { CategoryEnum } from "@/types/components";
+import { View } from "react-native";
 import { Image } from "../ui/image";
+import { Text } from "../ui/text";
 
 const imagePaths: { [key in CategoryEnum]: { [key: string]: any } } = {
     tools: {
@@ -29,10 +31,14 @@ const imagePaths: { [key in CategoryEnum]: { [key: string]: any } } = {
     },
 };
 
-const Tool = (props: { category: CategoryEnum; name: string, isLarge?: boolean }) => {
+const Tool = (props: { category: CategoryEnum; name: string; isLarge?: boolean; showTitle?: boolean }) => {
     const imagePath = imagePaths[props.category as CategoryEnum][props.name];
 
-    return <Image className={(props.isLarge ? "w-[40px] h-[40px]" : "w-[30px] h-[30px]") } source={imagePath} />;
+    return (
+        <View className="flex flex-col items-center justify-center gap-y-2">
+            <Image className={props.isLarge ? "w-[40px] h-[40px]" : "w-[30px] h-[30px]"} source={imagePath} />{props.showTitle ? <Text className="text-xs text-center">{props.name.charAt(0).toUpperCase() + props.name.slice(1)}</Text> : <></>}
+        </View>
+    );
 };
 
 export default Tool;

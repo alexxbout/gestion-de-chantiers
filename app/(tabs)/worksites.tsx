@@ -1,11 +1,15 @@
 import WorksiteCard from "@/components/custom/worksite-card";
+import { Button, ButtonText } from "@/components/ui/button";
 import { WorksiteStatus } from "@/types/database";
 import { WorksiteProp } from "@/types/navigation";
 import SegmentedControl, { NativeSegmentedControlIOSChangeEvent } from "@react-native-segmented-control/segmented-control";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { NativeSyntheticEvent, ScrollView, View } from "react-native";
 
 const Tab = () => {
+    const router = useRouter();
+
     // TODO: Load worksites from the database
     const worksites: WorksiteProp[] = [
         {
@@ -57,6 +61,10 @@ const Tab = () => {
         <ScrollView className="h-full p-6 bg-white">
             <View className="flex flex-col pb-10 bg-white gap-y-8">
                 <SegmentedControl values={segmentedValues} selectedIndex={selectedIndex} onChange={handleIndexChange} appearance="light" />
+
+                <Button onPress={() => router.push({ pathname: "/worksites/add" })} className="w-full" size="md">
+                    <ButtonText>Démarrer un nouveau chantier</ButtonText>
+                </Button>
 
                 {filteredWorksites.map((worksite, index) => (
                     <WorksiteCard key={index} id={worksite.id} title={worksite.title} description={worksite.description} start_date={worksite.start_date} status={worksite.status} />
