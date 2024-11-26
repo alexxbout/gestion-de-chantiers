@@ -1,8 +1,9 @@
-import CategorySelector from "@/components/custom/category-selector";
+import { ToolSelector, VehicleSelector } from "@/components/custom/category-selector";
 import CustomForm, { CustomFormProps } from "@/components/custom/custom-form";
 import { Button, ButtonText } from "@/components/ui/button";
+import { AddIcon, CloseCircleIcon, Icon, SlashIcon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
-import { CategoryEnum } from "@/types/components";
+import { VehicleStatus } from "@/types/components";
 import { WorksiteStatus } from "@/types/database";
 import { useState } from "react";
 import { ScrollView, View } from "react-native";
@@ -36,12 +37,36 @@ const Layout = () => {
 
             <View className="flex flex-col mt-10 gap-y-3">
                 <Text className="text-gray-500">Véhicules</Text>
-                <CategorySelector type={CategoryEnum.VEHICLES} />
+                <View className="flex flex-col gap-y-5">
+                    <View className="flex flex-row gap-x-2">
+                        <View className="p-1 bg-green-500 rounded-full w-max">
+                            <Icon as={AddIcon} className="w-4 h-4 text-white" />
+                        </View>
+
+                        <Text>Disponible</Text>
+                    </View>
+
+                    <View className="flex flex-row gap-x-2">
+                        <View className="p-1 bg-orange-500 rounded-full w-max">
+                            <Icon as={CloseCircleIcon} className="w-4 h-4 text-white" />
+                        </View>
+                        <Text>En maintenance</Text>
+                    </View>
+
+                    <View className="flex flex-row gap-x-2">
+                        <View className="p-1 bg-red-500 rounded-full w-max">
+                            <Icon as={SlashIcon} className="w-4 h-4 text-white" />
+                        </View>
+                        <Text>En utilisation</Text>
+                    </View>
+                </View>
+                
+                <VehicleSelector status={VehicleStatus.AVAILABLE} />
             </View>
 
             <View className="flex flex-col mt-10 gap-y-3">
                 <Text className="text-gray-500">Outils</Text>
-                <CategorySelector type={CategoryEnum.TOOLS} />
+                <ToolSelector />
             </View>
 
             <Button className="w-full mt-10" size="md">

@@ -37,3 +37,9 @@ export enum VehicleCategoryEnum {
     CRANE = "grue",
     LIFTING = "levage"
 }
+
+export enum VehicleStatus {
+    AVAILABLE = "disponible",
+    MAINTENANCE = "En maintenance",
+    IN_USE = "En utilisation",
+}

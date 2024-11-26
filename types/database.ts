@@ -1,3 +1,5 @@
+import { ToolCategoryEnum, VehicleCategoryEnum, VehicleStatus } from "./components";
+
 export interface User {
     uid: string; // Identifiant unique généré par Firebase Auth
     role: "Chef de chantier" | "Responsable" | "Equipier"; // Rôle de l'utilisateur
@@ -35,16 +37,14 @@ export interface Worksite {
 
 export interface Vehicle {
     id: number; // Identifiant unique du véhicule
-    model: string; // Modèle du véhicule
+    model: VehicleCategoryEnum; // Modèle du véhicule
     availability: Date[]; // Disponibilité du véhicule
-    status: "disponible" | "En maintenance" | "En utilisation"; // Statut du véhicule
+    status: VehicleStatus; // Statut du véhicule
 }
 
-export interface Material {
+export interface Tool {
     id: number; // Identifiant unique du matériel
-    name: string; // Nom du matériel
-    quantity: number; // Quantité disponible
-    status: "Disponible" | "En utilisation" | "En reparation"; // Statut du matériel
+    name: ToolCategoryEnum; // Nom du matériel
 }
 
 export interface Defect {
