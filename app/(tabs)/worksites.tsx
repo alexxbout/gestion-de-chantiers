@@ -11,8 +11,6 @@ const Tab = () => {
     const router = useRouter();
     const [worksites, setWorksites] = useState<Worksite[]>([]);
 
-    // TODO: Load worksites from the database
-
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [segmentedValues, setSegmentedValues] = useState(["Tous", "Non Réal.", "En cours", "Terminés", "Interr."]);
 
