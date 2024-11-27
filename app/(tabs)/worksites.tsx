@@ -79,7 +79,7 @@ const Tab = () => {
             <View className="flex flex-col pb-10 bg-white gap-y-8">
                 <SegmentedControl values={segmentedValues} selectedIndex={selectedIndex} onChange={handleIndexChange} appearance="light" />
 
-                <Button onPress={() => router.push({ pathname: "/worksites/add" })} className="w-full" size="md">
+                <Button onPress={() => router.push({ pathname: "../worksites/add" })} className="w-full" size="md">
                     <ButtonText>Démarrer un nouveau chantier</ButtonText>
                 </Button>
 
