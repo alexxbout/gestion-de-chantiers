@@ -6,13 +6,19 @@ import { Input, InputField } from "../ui/input";
 import { Select, SelectBackdrop, SelectContent, SelectDragIndicator, SelectDragIndicatorWrapper, SelectIcon, SelectInput, SelectItem, SelectPortal, SelectTrigger } from "../ui/select";
 import { Text } from "../ui/text";
 
-interface CustomFormField {
+export interface CustomFormField {
     key: string;
     label: string;
     placeholder: string;
     type: "text" | "select" | "date";
     required: boolean;
-    options?: { label: string; value: string }[];
+    options?: CustomFormOption[];
+}
+
+export interface CustomFormOption {
+    label: string;
+    value: string;
+    disabled?: boolean;
 }
 
 export interface CustomFormProps {
@@ -47,10 +53,7 @@ const CustomForm = (props: CustomFormProps) => {
                         switch (field.type) {
                             case "select":
                                 return field.options ? (
-                                    <Select
-                                        selectedValue={formValues[field.key]}
-                                        onValueChange={(value) => handleInputChange(field.key, value)}
-                                    >
+                                    <Select selectedValue={formValues[field.key]} onValueChange={(value) => handleInputChange(field.key, value)}>
                                         <SelectTrigger variant="outline" size="xl">
                                             <SelectInput placeholder={field.placeholder} />
                                             <SelectIcon className="mr-3" as={ChevronDownIcon} />
@@ -62,7 +65,7 @@ const CustomForm = (props: CustomFormProps) => {
                                                     <SelectDragIndicator />
                                                 </SelectDragIndicatorWrapper>
                                                 {field.options.map((option) => (
-                                                    <SelectItem key={option.value} label={option.label} value={option.value} />
+                                                    <SelectItem key={option.value} label={option.label} value={option.value} isDisabled={option.disabled} />
                                                 ))}
                                             </SelectContent>
                                         </SelectPortal>

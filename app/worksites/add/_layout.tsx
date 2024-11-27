@@ -1,5 +1,5 @@
 import { ToolSelector, VehicleSelector } from "@/components/custom/category-selector";
-import CustomForm, { CustomFormProps } from "@/components/custom/custom-form";
+import CustomForm, { CustomFormOption, CustomFormProps } from "@/components/custom/custom-form";
 import { Button, ButtonText } from "@/components/ui/button";
 import { AddIcon, CloseCircleIcon, Icon, SlashIcon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
@@ -15,9 +15,10 @@ const Layout = () => {
         setFormValues(values);
     };
 
-    const worksiteStatusOptions = Object.entries(WorksiteStatus).map(([label, value]) => ({
+    const worksiteStatusOptions = Object.entries(WorksiteStatus).map(([label, value]): CustomFormOption => ({
         label: value,
         value: label.toLowerCase(),
+        disabled: false
     }));
 
     const fields: CustomFormProps["fields"] = [
