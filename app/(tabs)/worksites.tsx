@@ -12,36 +12,6 @@ const Tab = () => {
     const [worksites, setWorksites] = useState<Worksite[]>([]);
 
     // TODO: Load worksites from the database
-    // const worksites: WorksiteProp[] = [
-    //     {
-    //         id: 1,
-    //         title: "Les Terrasses",
-    //         description: "Projet résidentiel avec des espaces en terrasses ou en hauteur",
-    //         start_date: "2022-01-01",
-    //         status: WorksiteStatus.COMPLETED,
-    //     },
-    //     {
-    //         id: 2,
-    //         title: "Cœur de Ville",
-    //         description: "Revitalisation urbaine en centre-ville",
-    //         start_date: "2022-01-01",
-    //         status: WorksiteStatus.IN_PROGRESS,
-    //     },
-    //     {
-    //         id: 3,
-    //         title: "Chantier 3",
-    //         description: "Description du chantier 3",
-    //         start_date: "2022-01-01",
-    //         status: WorksiteStatus.INTERRUPTED,
-    //     },
-    //     {
-    //         id: 3,
-    //         title: "Chantier 4",
-    //         description: "Description du chantier 3",
-    //         start_date: "2022-01-01",
-    //         status: WorksiteStatus.INTERRUPTED,
-    //     },
-    // ];
 
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [segmentedValues, setSegmentedValues] = useState(["Tous", "Non Réal.", "En cours", "Terminés", "Interr."]);
