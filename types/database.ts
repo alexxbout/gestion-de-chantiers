@@ -1,5 +1,11 @@
 import { ToolCategoryEnum, VehicleCategoryEnum, VehicleStatus } from "./components";
 
+export enum RessourceType {
+    VEHICLE = "vehicle",
+    TOOL = "tool",
+    WORKSITE = "worksite",
+}
+
 export interface User {
     uid: string; // Identifiant unique généré par Firebase Auth
     id: number; // Identifiant unique de l'utilisateur
@@ -39,7 +45,10 @@ export interface Worksite {
     materials: number[]; // Liste des identifiants des matériels nécessaires
     team: number; // Identifiant de l'équipe assignée
     defects?: Defect[]; // Liste des anomalies signalées
-    pictures?: Picture[]; // Liste des photos du chantier
+    pictures: {
+        card: Picture; // Photo de présentation du chantier
+        gallery: Picture[]; // Galerie de photos du chantier
+    }
 }
 
 export interface Vehicle {

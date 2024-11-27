@@ -29,12 +29,13 @@
                 "reportedBy": 1
             }
         ],
-        "pictures": [
-            {
+        "pictures": {
+            "card": {
                 "id": 1,
                 "url": "https://images.unsplash.com/photo-1565599573128-ae3ef5c9f478?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            }
-        ]
+            },
+            "gallery": []
+        }
     },
     {
         "id": 2,
@@ -59,7 +60,13 @@
         ],
         "team": 2,
         "defects": [],
-        "pictures": []
+        "pictures": {
+            "card": {
+                "id": 3,
+                "url": "https://images.unsplash.com/photo-1433832597046-4f10e10ac764?q=80&w=1942&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            },
+            "gallery": []
+        }
     },
     {
         "id": 3,
@@ -91,10 +98,50 @@
                 "reportedBy": 0
             }
         ],
-        "pictures": [
-            {
+        "pictures": {
+            "card": {
                 "id": 2,
-                "url": "https://images.unsplash.com/photo-1433832597046-4f10e10ac764?q=80&w=1942&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"            }
-        ]
+                "url": "https://images.unsplash.com/photo-1501681183400-962973118dc2?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            },
+            "gallery": []
+        }
+    },
+    {
+        "id": 4,
+        "title": "Construction de logements collectifs",
+        "description": "Construction de deux bâtiments résidentiels avec 30 appartements chacun.",
+        "status": "Interrompu",
+        "startDate": "2024-11-15",
+        "duration": 60,
+        "location": "123 Rue des Lilas, Paris",
+        "client": {
+            "name": "Société ImmoLux",
+            "phone": "+33 1 23 45 67 89"
+        },
+        "vehicles": [
+            1,
+            2
+        ],
+        "materials": [
+            1,
+            4,
+            7
+        ],
+        "team": 1,
+        "defects": [
+            {
+                "id": 1,
+                "description": "Fissure dans le mur du sous-sol",
+                "date": "2024-11-20",
+                "reportedBy": 1
+            }
+        ],
+        "pictures": {
+            "card": {
+                "id": 1,
+                "url": "https://images.unsplash.com/photo-1547206704-8de50bc5ea83?q=80&w=3166&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            },
+            "gallery": []
+        }
     }
 ]

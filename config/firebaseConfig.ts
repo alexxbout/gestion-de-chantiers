@@ -30,8 +30,8 @@ export const uploadDataToFirestore = async (file: any, collectionName: string): 
     }
 };
 
-export const findDocumentById = async (targetId: number) => {
-    const q = query(collection(db, "your_collection_name"), where("id", "==", targetId));
+export const findDocumentById = async (targetId: number, collectionName: string) => {
+    const q = query(collection(db, collectionName), where("id", "==", targetId));
     const querySnapshot = await getDocs(q);
 
     querySnapshot.forEach((doc) => {
@@ -41,6 +41,18 @@ export const findDocumentById = async (targetId: number) => {
     if (querySnapshot.empty) {
         console.log("Aucun document trouvé avec cet id.");
     }
+};
+
+export const getAllDocuments = async <T>(collectionName: string): Promise<T[]> => {
+    const collectionRef = collection(db, collectionName);
+    const querySnapshot = await getDocs(collectionRef);
+    const documents: any[] = [];
+
+    querySnapshot.forEach((doc) => {
+        documents.push(doc.data());
+    });
+
+    return documents;
 };
 
 export const clearData = async (collectionName: string): Promise<void> => {

@@ -3,17 +3,10 @@ import vehicleSample from "@/assets/samples/vehicle_sample.json";
 import worksiteSample from "@/assets/samples/worksite_sample.json";
 import { Button, ButtonText } from "@/components/ui/button";
 import { clearData, uploadDataToFirestore } from "@/config/firebaseConfig";
+import { RessourceType } from "@/types/database";
 import { View } from "react-native";
 
-enum RessourceType {
-    VEHICLE = "vehicle",
-    TOOL = "tool",
-    WORKSITE = "worksite",
-}
-
 const Tab = () => {
-    console.log("Véhicules chargés:", vehicleSample);
-
     const add = (type: RessourceType) => {
         console.log("Ajout de ressource de type", type);
 
