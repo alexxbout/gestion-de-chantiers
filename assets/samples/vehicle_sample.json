@@ -1,0 +1,56 @@
+[
+    {
+        "id": 1,
+        "model": "beton",
+        "period": {
+            "start": "2024-01-01T08:00:00.000Z",
+            "end": "2024-01-01T18:00:00.000Z"
+        },
+        "status": "disponible"
+    },
+    {
+        "id": 2,
+        "model": "camion",
+        "period": {
+            "start": "2024-01-02T09:00:00.000Z",
+            "end": "2024-01-02T17:00:00.000Z"
+        },
+        "status": "En maintenance"
+    },
+    {
+        "id": 3,
+        "model": "construction",
+        "period": {
+            "start": "2024-01-03T10:00:00.000Z",
+            "end": "2024-01-03T16:00:00.000Z"
+        },
+        "status": "En utilisation"
+    },
+    {
+        "id": 4,
+        "model": "destruction",
+        "period": {
+            "start": "2024-01-04T11:00:00.000Z",
+            "end": "2024-01-04T15:00:00.000Z"
+        },
+        "status": "disponible"
+    },
+    {
+        "id": 5,
+        "model": "grue",
+        "period": {
+            "start": "2024-01-05T12:00:00.000Z",
+            "end": "2024-01-05T14:00:00.000Z"
+        },
+        "status": "En maintenance"
+    },
+    {
+        "id": 6,
+        "model": "levage",
+        "period": {
+            "start": "2024-01-06T07:00:00.000Z",
+            "end": "2024-01-06T12:00:00.000Z"
+        },
+        "status": "En utilisation"
+    }
+]

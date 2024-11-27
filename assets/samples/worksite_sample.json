@@ -1,0 +1,100 @@
+[
+    {
+        "id": 1,
+        "title": "Construction de logements collectifs",
+        "description": "Construction de deux bâtiments résidentiels avec 30 appartements chacun.",
+        "status": "En cours",
+        "startDate": "2024-11-15",
+        "duration": 60,
+        "location": "123 Rue des Lilas, Paris",
+        "client": {
+            "name": "Société ImmoLux",
+            "phone": "+33 1 23 45 67 89"
+        },
+        "vehicles": [
+            1,
+            2
+        ],
+        "materials": [
+            1,
+            4,
+            7
+        ],
+        "team": 1,
+        "defects": [
+            {
+                "id": 1,
+                "description": "Fissure dans le mur du sous-sol",
+                "date": "2024-11-20",
+                "reportedBy": 1
+            }
+        ],
+        "pictures": [
+            {
+                "id": 1,
+                "url": "https://images.unsplash.com/photo-1565599573128-ae3ef5c9f478?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "title": "Rénovation de locaux industriels",
+        "description": "Réhabilitation d'une usine désaffectée pour y installer des bureaux modernes.",
+        "status": "Non réalisé",
+        "startDate": "2024-12-01",
+        "duration": 40,
+        "location": "45 Avenue de l'Industrie, Lyon",
+        "client": {
+            "name": "TechFactory",
+            "phone": "+33 4 56 78 90 12"
+        },
+        "vehicles": [
+            3
+        ],
+        "materials": [
+            2,
+            5,
+            8,
+            12
+        ],
+        "team": 2,
+        "defects": [],
+        "pictures": []
+    },
+    {
+        "id": 3,
+        "title": "Démolition d'un ancien entrepôt",
+        "description": "Démolition d'une structure métallique pour un projet de réaménagement urbain.",
+        "status": "Terminé",
+        "startDate": "2024-10-01",
+        "duration": 20,
+        "location": "87 Rue des Entreprises, Marseille",
+        "client": {
+            "name": "UrbanPlan",
+            "phone": "+33 6 78 90 12 34"
+        },
+        "vehicles": [
+            4
+        ],
+        "materials": [
+            3,
+            6,
+            9,
+            10
+        ],
+        "team": 3,
+        "defects": [
+            {
+                "id": 2,
+                "description": "Outil endommagé : marteau",
+                "date": "2024-10-05",
+                "reportedBy": 0
+            }
+        ],
+        "pictures": [
+            {
+                "id": 2,
+                "url": "https://images.unsplash.com/photo-1433832597046-4f10e10ac764?q=80&w=1942&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"            }
+        ]
+    }
+]

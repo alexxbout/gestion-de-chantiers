@@ -1,4 +1,4 @@
-import { AlertCircleIcon, CalendarDaysIcon, CopyIcon, GlobeIcon, Icon } from "@/components/ui/icon";
+import { AlertCircleIcon, CalendarDaysIcon, CopyIcon, GlobeIcon, Icon, SettingsIcon } from "@/components/ui/icon";
 import { BlurView } from "expo-blur";
 import { Tabs } from "expo-router";
 import { StyleSheet } from "react-native";
@@ -39,6 +39,13 @@ const TabLayout = () => {
                 options={{
                     title: "Anomalies",
                     tabBarIcon: ({ focused, color, size }) => <Icon as={AlertCircleIcon} color={focused ? "blue" : "gray"} />,
+                }}
+            />
+            <Tabs.Screen
+                name="settings"
+                options={{
+                    title: "Réglages",
+                    tabBarIcon: ({ focused, color, size }) => <Icon as={SettingsIcon} color={focused ? "blue" : "gray"} />,
                 }}
             />
         </Tabs>
