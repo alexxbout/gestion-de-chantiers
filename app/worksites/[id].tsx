@@ -100,7 +100,7 @@ const Layout = () => {
                         <WorksiteStatusBadge status={worksite.status} />
                     </View>
 
-                    <View className="flex gap-y-16">
+                    <View className="flex gap-y-12">
                         <View className="flex gap-y-5">
                             <Text className="text-2xl text-black">Informations</Text>
                             <View className="flex font-light gap-y-5">
