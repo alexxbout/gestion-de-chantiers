@@ -6,8 +6,8 @@ import { Image } from "@/components/ui/image";
 import { Text } from "@/components/ui/text/index.web";
 import { formatDate } from "@/components/utils";
 import { findDocumentById } from "@/config/firebaseConfig";
-import { CategoryEnum, ToolCategoryEnum } from "@/types/components";
-import { CollectionName, Tool, Worksite } from "@/types/database";
+import { CategoryEnum } from "@/types/components";
+import { CollectionName, Tool, Vehicle, Worksite } from "@/types/database";
 import { BlurView } from "expo-blur";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -17,11 +17,8 @@ const Layout = () => {
     const router = useRouter();
     const { id } = useLocalSearchParams();
     const [worksite, setWorksite] = useState<Worksite | null>(null);
-    const [tools, setTools] = useState<Tool[]>([
-        { id: 0, name: ToolCategoryEnum.BRICK },
-        { id: 1, name: ToolCategoryEnum.WHEELBARROW },
-        { id: 2, name: ToolCategoryEnum.KEY },
-    ]);
+    const [tools, setTools] = useState<Tool[]>([]);
+    const [vehicles, setVehicles] = useState<Vehicle[]>([]);
 
     // const [users, setUsers] = useState<User[]>([
     //     { uid: "0", role: "Equipier", name: "Jean Dupont", email: "", assignedChantiers: [0, 1, 2] },
@@ -71,6 +68,22 @@ const Layout = () => {
 
         if (worksite?.materials) {
             fetchTools();
+        }
+
+        const fetchVehicle = async () => {
+            if (!worksite) return;
+
+            try {
+                const rawVehicles = await Promise.all(worksite.vehicles.map((vehicleId) => findDocumentById(vehicleId, CollectionName.VEHICLE)));
+
+                setVehicles(rawVehicles as Vehicle[]);
+            } catch (error) {
+                console.error("Error fetching vehicles: ", error);
+            }
+        };
+
+        if (worksite?.vehicles) {
+            fetchVehicle();
         }
     }, [worksite]);
 
@@ -161,6 +174,11 @@ const Layout = () => {
                         <View className="flex gap-y-5">
                             <Text className="text-2xl text-black">Matériel</Text>
                             <CategoryList category={CategoryEnum.TOOLS} items={tools} />
+                        </View>
+
+                        <View className="flex gap-y-5">
+                            <Text className="text-2xl text-black">Véhicules</Text>
+                            <CategoryList category={CategoryEnum.VEHICLES} items={vehicles} />
                         </View>
 
                         <View className="flex gap-y-5">
