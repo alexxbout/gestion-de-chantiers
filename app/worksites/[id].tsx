@@ -1,3 +1,4 @@
+import CategoryList from "@/components/custom/category-list";
 import WorksiteStatusBadge from "@/components/custom/worksite-status-badge";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { AlertCircleIcon } from "@/components/ui/icon";
@@ -5,7 +6,8 @@ import { Image } from "@/components/ui/image";
 import { Text } from "@/components/ui/text/index.web";
 import { formatDate } from "@/components/utils";
 import { findDocumentById } from "@/config/firebaseConfig";
-import { CollectionName, Worksite } from "@/types/database";
+import { CategoryEnum, ToolCategoryEnum } from "@/types/components";
+import { CollectionName, Tool, Worksite } from "@/types/database";
 import { BlurView } from "expo-blur";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -15,6 +17,11 @@ const Layout = () => {
     const router = useRouter();
     const { id } = useLocalSearchParams();
     const [worksite, setWorksite] = useState<Worksite | null>(null);
+    const [tools, setTools] = useState<Tool[]>([
+        { id: 0, name: ToolCategoryEnum.BRICK },
+        { id: 1, name: ToolCategoryEnum.WHEELBARROW },
+        { id: 2, name: ToolCategoryEnum.KEY },
+    ]);
 
     // const [users, setUsers] = useState<User[]>([
     //     { uid: "0", role: "Equipier", name: "Jean Dupont", email: "", assignedChantiers: [0, 1, 2] },
@@ -39,19 +46,33 @@ const Layout = () => {
             try {
                 const fetchedWorksite = await findDocumentById(Number.parseInt(id as string), CollectionName.WORKSITE);
                 setWorksite(fetchedWorksite as Worksite);
-
-                // Assuming the lead and users are part of the worksite data
-                // if (fetchedWorksite) {
-                //     setLead(fetchedWorksite.lead);
-                //     setUsers(fetchedWorksite.users);
-                // }
             } catch (error) {
                 console.error("Error fetching worksite: ", error);
             }
         };
 
-        fetchWorksite();
+        if (id) {
+            fetchWorksite();
+        }
     }, [id]);
+
+    useEffect(() => {
+        const fetchTools = async () => {
+            if (!worksite) return;
+
+            try {
+                const rawTools = await Promise.all(worksite.materials.map((toolId) => findDocumentById(toolId, CollectionName.TOOL)));
+
+                setTools(rawTools as Tool[]);
+            } catch (error) {
+                console.error("Error fetching tools: ", error);
+            }
+        };
+
+        if (worksite?.materials) {
+            fetchTools();
+        }
+    }, [worksite]);
 
     // useEffect(() => {
     //     axios
@@ -136,6 +157,11 @@ const Layout = () => {
                                 reportedBy="Alexandre Boutinaud"
                             />
                         </View> */}
+
+                        <View className="flex gap-y-5">
+                            <Text className="text-2xl text-black">Matériel</Text>
+                            <CategoryList category={CategoryEnum.TOOLS} items={tools} />
+                        </View>
 
                         <View className="flex gap-y-5">
                             <Text className="text-2xl text-black">Localisation</Text>
