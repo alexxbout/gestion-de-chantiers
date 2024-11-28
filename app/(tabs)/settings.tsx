@@ -1,8 +1,8 @@
-import toolSample from "@/assets/samples/tool_sample.json";
-import vehicleSample from "@/assets/samples/vehicle_sample.json";
-import worksiteSample from "@/assets/samples/worksite_sample.json";
 import { Button, ButtonText } from "@/components/ui/button";
 import { clearData, uploadDataToFirestore } from "@/config/firebaseConfig";
+import toolSample from "@/samples/tool_sample.json";
+import vehicleSample from "@/samples/vehicle_sample.json";
+import worksiteSample from "@/samples/worksite_sample.json";
 import { CollectionName } from "@/types/database";
 import { View } from "react-native";
 

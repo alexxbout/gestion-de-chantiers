@@ -139,6 +139,7 @@ const Layout = () => {
 
                         <View className="flex gap-y-5">
                             <Text className="text-2xl text-black">Localisation</Text>
+                            <Text className="text-lg font-light">{worksite.location}</Text>
                         </View>
 
                         <View className="flex gap-y-5">
