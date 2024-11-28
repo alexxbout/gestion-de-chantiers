@@ -1,9 +1,9 @@
 import WorksiteStatusBadge from "@/components/custom/worksite-status-badge";
-import { Badge, BadgeIcon, BadgeText } from "@/components/ui/badge";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
-import { AlertCircleIcon, CheckIcon } from "@/components/ui/icon";
+import { AlertCircleIcon } from "@/components/ui/icon";
 import { Image } from "@/components/ui/image";
 import { Text } from "@/components/ui/text/index.web";
+import { formatDate } from "@/components/utils";
 import { findDocumentById } from "@/config/firebaseConfig";
 import { CollectionName, Worksite } from "@/types/database";
 import { BlurView } from "expo-blur";
@@ -110,7 +110,7 @@ const Layout = () => {
                                 </View>
                                 <View>
                                     <Text className="text-lg font-light text-gray-400">Date de début</Text>
-                                    <Text className="text-lg font-light">{worksite.startDate.toString()}</Text>
+                                    <Text className="text-lg font-light">{formatDate(worksite.startDate)}</Text>
                                 </View>
                                 <View>
                                     <Text className="text-lg font-light text-gray-400">Client</Text>
