@@ -114,7 +114,10 @@ const Layout = () => {
                                 </View>
                                 <View>
                                     <Text className="text-lg font-light text-gray-400">Client</Text>
-                                    <Text className="text-lg font-light">{worksite.client.name}</Text>
+                                    <View className="flex flex-row items-center justify-between">
+                                        <Text className="text-lg font-light">{worksite.client.name}</Text>
+                                        <Text className="text-lg font-light">{worksite.client.phone}</Text>
+                                    </View>
                                 </View>
                             </View>
                         </View>
