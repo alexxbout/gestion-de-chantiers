@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "name": "Equipe de démolition",
+        "members": {
+            "lead": 1,
+            "workers": [2, 3, 4]
+        }
+    },
+    {
+        "id": 2,
+        "name": "Equipe de terrassement",
+        "members": {
+            "lead": 5,
+            "workers": [6, 7]
+        }
+    },
+    {
+        "id": 3,
+        "name": "Equipe de maçonnerie",
+        "members": {
+            "lead": 8,
+            "workers": [1, 2, 3, 4, 5, 6, 7]
+        }
+    }
+]

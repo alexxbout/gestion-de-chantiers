@@ -1,8 +1,10 @@
 import { Button, ButtonText } from "@/components/ui/button";
 import { clearData, uploadDataToFirestore } from "@/config/firebaseConfig";
-import toolSample from "@/samples/tool_sample.json";
-import vehicleSample from "@/samples/vehicle_sample.json";
-import worksiteSample from "@/samples/worksite_sample.json";
+import teamSample from "@/samples/team-sample.json";
+import toolSample from "@/samples/tool-sample.json";
+import userSample from "@/samples/user-sample.json";
+import vehicleSample from "@/samples/vehicle-sample.json";
+import worksiteSample from "@/samples/worksite-sample.json";
 import { CollectionName } from "@/types/database";
 import { View } from "react-native";
 
@@ -19,6 +21,12 @@ const Tab = () => {
                 break;
             case CollectionName.WORKSITE:
                 uploadDataToFirestore(worksiteSample, type);
+                break;
+            case CollectionName.USER:
+                uploadDataToFirestore(userSample, type);
+                break;
+            case CollectionName.TEAM:
+                uploadDataToFirestore(teamSample, type);
                 break;
             default:
                 console.error("Type de ressource inconnu.");
@@ -48,6 +56,14 @@ const Tab = () => {
 
             <Button onPress={() => add(CollectionName.WORKSITE)}>
                 <ButtonText>Ajouter des chantiers</ButtonText>
+            </Button>
+
+            <Button onPress={() => add(CollectionName.USER)}>
+                <ButtonText>Ajouter des utilisateurs</ButtonText>
+            </Button>
+
+            <Button onPress={() => add(CollectionName.TEAM)}>
+                <ButtonText>Ajouter des équipes</ButtonText>
             </Button>
         </View>
     );

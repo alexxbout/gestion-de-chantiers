@@ -1,5 +1,6 @@
 import CategoryList from "@/components/custom/category-list";
 import DefectCard from "@/components/custom/defect";
+import TeamCard from "@/components/custom/team";
 import WorksiteStatusBadge from "@/components/custom/worksite-status-badge";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { AlertCircleIcon } from "@/components/ui/icon";
@@ -8,7 +9,7 @@ import { Text } from "@/components/ui/text/index.web";
 import { formatDate } from "@/components/utils";
 import { findDocumentById } from "@/config/firebaseConfig";
 import { CategoryEnum } from "@/types/components";
-import { CollectionName, Tool, Vehicle, Worksite } from "@/types/database";
+import { CollectionName, Team, Tool, User, Vehicle, Worksite } from "@/types/database";
 import { BlurView } from "expo-blur";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -17,27 +18,15 @@ import { ScrollView, View } from "react-native";
 const Layout = () => {
     const router = useRouter();
     const { id } = useLocalSearchParams();
+
     const [worksite, setWorksite] = useState<Worksite | null>(null);
+
     const [tools, setTools] = useState<Tool[]>([]);
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
 
-    // const [users, setUsers] = useState<User[]>([
-    //     { uid: "0", role: "Equipier", name: "Jean Dupont", email: "", assignedChantiers: [0, 1, 2] },
-    //     { uid: "1", role: "Equipier", name: "Marie Dupond", email: "", assignedChantiers: [0, 1, 2] },
-    //     { uid: "2", role: "Equipier", name: "Paul Durand", email: "", assignedChantiers: [0, 1, 2] },
-    //     { uid: "4", role: "Equipier", name: "Paul Durand", email: "", assignedChantiers: [0, 1, 2] },
-    //     { uid: "5", role: "Equipier", name: "Paul Durand", email: "", assignedChantiers: [0, 1, 2] },
-    //     { uid: "6", role: "Equipier", name: "Paul Durand", email: "", assignedChantiers: [0, 1, 2] },
-    // ]);
-
-    // const [lead, setLead] = useState<User>({
-    //     uid: "3",
-    //     role: "Chef de chantier",
-    //     name: "Alexandre Boutinaud",
-    //     email: "",
-    //     assignedChantiers: [0, 1, 2],
-    //     photoURL: "",
-    // });
+    const [team, setTeam] = useState<Team | null>(null);
+    const [teamLead, setTeamLead] = useState<User | null>(null);
+    const [teamWorkers, setTeamWorkers] = useState<User[]>([]);
 
     useEffect(() => {
         const fetchWorksite = async () => {
@@ -86,29 +75,55 @@ const Layout = () => {
         if (worksite?.vehicles) {
             fetchVehicle();
         }
+
+        const fetchTeam = async () => {
+            if (!worksite) return;
+
+            try {
+                const fetchedTeam = await findDocumentById(worksite.team, CollectionName.TEAM);
+                setTeam(fetchedTeam as Team);
+            } catch (error) {
+                console.error("Error fetching team: ", error);
+            }
+        };
+
+        if (worksite?.team) {
+            fetchTeam();
+        }
     }, [worksite]);
 
-    // useEffect(() => {
-    //     axios
-    //         .get(`https://tinyfac.es/api/data?limit=${users.length + 1}&quality=0`)
-    //         .then((response) => {
-    //             const updatedLead = {
-    //                 ...lead,
-    //                 photoURL: response.data[0]?.url || "",
-    //             };
+    useEffect(() => {
+        const fetchTeamLead = async () => {
+            if (!team) return;
 
-    //             const updatedUsers = users.map((user, index) => ({
-    //                 ...user,
-    //                 photoURL: response.data[index + 1]?.url || "",
-    //             }));
+            try {
+                const fetchedTeamLead = await findDocumentById(team.members.lead, CollectionName.USER);
+                setTeamLead(fetchedTeamLead as User);
+            } catch (error) {
+                console.error("Error fetching team lead: ", error);
+            }
+        };
 
-    //             setUsers(updatedUsers);
-    //             setLead(updatedLead);
-    //         })
-    //         .catch((error) => {
-    //             console.error("Failed to fetch user photos:", error);
-    //         });
-    // }, []);
+        if (team?.members.lead) {
+            fetchTeamLead();
+        }
+
+        const fetchTeamWorkers = async () => {
+            if (!team) return;
+
+            try {
+                const rawTeamWorkers = await Promise.all(team.members.workers.map((workerId) => findDocumentById(workerId, CollectionName.USER)));
+
+                setTeamWorkers(rawTeamWorkers as User[]);
+            } catch (error) {
+                console.error("Error fetching team workers: ", error);
+            }
+        };
+
+        if (team?.members.workers) {
+            fetchTeamWorkers();
+        }
+    }, [team]);
 
     if (!worksite) {
         return (
@@ -157,10 +172,10 @@ const Layout = () => {
                             </View>
                         </View>
 
-                        {/* <View className="flex gap-y-5">
+                        <View className="flex gap-y-5">
                             <Text className="text-2xl text-black">Equipe</Text>
-                            <Team team={"Une team"} users={users} lead={lead} />
-                        </View> */}
+                            {team && teamLead && teamWorkers && <TeamCard name={team.name} members={{ lead: teamLead, workers: teamWorkers }} />}
+                        </View>
 
                         <View className="flex gap-y-5">
                             <Text className="text-2xl text-black">Anomalies</Text>

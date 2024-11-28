@@ -4,10 +4,11 @@ export enum CollectionName {
     VEHICLE = "vehicle",
     TOOL = "tool",
     WORKSITE = "worksite",
+    USER = "user",
+    TEAM = "team",
 }
 
 export interface User {
-    uid: string; // Identifiant unique généré par Firebase Auth
     id: number; // Identifiant unique de l'utilisateur
     role: "Chef de chantier" | "Responsable" | "Equipier"; // Rôle de l'utilisateur
     name: string; // Nom de l'utilisateur
@@ -19,7 +20,10 @@ export interface User {
 export interface Team {
     id: number; // Identifiant unique de l'équipe
     name: string; // Nom de l'équipe
-    members: number[]; // Liste des identifiants des membres de l'équipe
+    members: { // Liste des membres de l'équipe
+        lead: number; // Identifiant du chef de chantier
+        workers: number[]; // Liste des identifiants des équipiers
+    };
 }
 
 export enum WorksiteStatus {
@@ -48,16 +52,17 @@ export interface Worksite {
     pictures: {
         card: Picture; // Photo de présentation du chantier
         gallery: Picture[]; // Galerie de photos du chantier
-    }
+    };
 }
 
 export interface Vehicle {
     id: number; // Identifiant unique du véhicule
     model: VehicleCategoryEnum; // Modèle du véhicule
-    period: { // Période de réservation
-        start: Date
-        end: Date
-    }; 
+    period: {
+        // Période de réservation
+        start: Date;
+        end: Date;
+    };
     status: VehicleStatus; // Statut du véhicule
 }
 

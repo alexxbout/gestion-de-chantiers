@@ -1,0 +1,50 @@
+[
+    {
+        "id": 1,
+        "role": "Chef de chantier",
+        "name": "Jean Dupont",
+        "email": "jean.dupont@gmail.com"
+    },
+    {
+        "id": 2,
+        "role": "Responsable",
+        "name": "Marie Durand",
+        "email": "marie.durant@gmail.com"
+    },
+    {
+        "id": 3,
+        "role": "Equipier",
+        "name": "Pierre Martin",
+        "email": "pierre.martin@gmail.com"
+    },
+    {
+        "id": 4,
+        "role": "Equipier",
+        "name": "Sophie Lefevre",
+        "email": "sophie.lefevre@gmail.com"
+    },
+    {
+        "id": 5,
+        "role": "Equipier",
+        "name": "Pauline Lemoine",
+        "email": "pauline.lemoine@gmail.com"
+    },
+    {
+        "id": 6,
+        "role": "Equipier",
+        "name": "Lucas Lefevre",
+        "email": "lucas.lefevre@gmail.com"
+    },
+    {
+        "id": 7,
+        "role": "Equipier",
+        "name": "Julie Lemoine",
+        "email": "julie.lemoine@gmail.com"
+    },
+    {
+        "id": 8,
+        "role": "Equipier",
+        "name": "Thomas Lefevre",
+        "email": "thomas.lefevre@gmail.com"
+    }
+]
