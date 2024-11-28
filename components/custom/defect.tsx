@@ -11,7 +11,7 @@ const DefectCard = (props: Defect) => {
             <View className="flex flex-col gap-y-2">
                 <Text className="text-red-700" size="md">{props.description}</Text>
                 <Text className="text-gray-500" size="md">
-                    {props.reportedBy} - {formatDate(props.date)}
+                    {formatDate(props.date)}
                 </Text>
             </View>
         </View>

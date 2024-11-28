@@ -1,4 +1,5 @@
 import CategoryList from "@/components/custom/category-list";
+import DefectCard from "@/components/custom/defect";
 import WorksiteStatusBadge from "@/components/custom/worksite-status-badge";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { AlertCircleIcon } from "@/components/ui/icon";
@@ -161,15 +162,13 @@ const Layout = () => {
                             <Team team={"Une team"} users={users} lead={lead} />
                         </View> */}
 
-                        {/* <View className="flex gap-y-5">
+                        <View className="flex gap-y-5">
                             <Text className="text-2xl text-black">Anomalies</Text>
-                            <DefectCard
-                                id={1}
-                                date="2023-04-24"
-                                description="Une anomalie"
-                                reportedBy="Alexandre Boutinaud"
-                            />
-                        </View> */}
+
+                            {worksite.defects.map((defect) => (
+                                <DefectCard key={defect.id} id={defect.id} date={defect.date} description={defect.description} />
+                            ))}
+                        </View>
 
                         <View className="flex gap-y-5">
                             <Text className="text-2xl text-black">Matériel</Text>

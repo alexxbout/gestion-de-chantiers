@@ -44,7 +44,7 @@ export interface Worksite {
     vehicles: number[]; // Liste des identifiants des véhicules nécessaires
     materials: number[]; // Liste des identifiants des matériels nécessaires
     team: number; // Identifiant de l'équipe assignée
-    defects?: Defect[]; // Liste des anomalies signalées
+    defects: Defect[]; // Liste des anomalies signalées
     pictures: {
         card: Picture; // Photo de présentation du chantier
         gallery: Picture[]; // Galerie de photos du chantier
@@ -70,7 +70,6 @@ export interface Defect {
     id: number; // Identifiant unique de l'anomalie
     description: string; // Description de l'anomalie
     date: string; // Date de signalement
-    reportedBy: number; // Utilisateur ayant signalé l'anomalie
 }
 
 export interface Picture {
