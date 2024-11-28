@@ -202,7 +202,21 @@ const Layout = () => {
 
                         <View className="flex gap-y-5">
                             <Text className="text-2xl text-black">Photos</Text>
+                            <View className="flex flex-row overflow-x-auto gap-x-5 snap-x">
+                                {worksite.pictures.gallery.map((picture) => (
+                                    <Image
+                                        key={picture.id}
+                                        className="rounded-md h-[200px] w-[250px] snap-center"
+                                        alt="worksite"
+                                        source={{
+                                            uri: picture.value,
+                                        }}
+                                    />
+                                ))}
+                            </View>
                         </View>
+
+                        <View className="py-5" />
                     </View>
                 </View>
             </ScrollView>
