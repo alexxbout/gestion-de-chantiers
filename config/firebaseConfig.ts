@@ -44,7 +44,7 @@ export const findDocumentById = async (id: number, collectionName: CollectionNam
     const document = querySnapshot.docs[0].data();
 
     console.log("Document data:", document);
-    
+
     return document;
 };
 
@@ -74,4 +74,25 @@ export const clearData = async (collectionName: CollectionName): Promise<void> =
     });
 
     console.log("Effacement des données terminé.");
+};
+
+export const updateDocument = async (id: number, collectionName: CollectionName, data: any): Promise<void> => {
+    const collectionRef = collection(db, collectionName);
+    const q = query(collectionRef, where("id", "==", id));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+        console.log("No matching documents.");
+        return;
+    }
+
+    querySnapshot.forEach(async (doc) => {
+        try {
+            await addDoc(collectionRef, data);
+            await deleteDoc(doc.ref);
+            console.log(`Document updated with id: ${id}`);
+        } catch (error) {
+            console.error("Error updating document: ", error);
+        }
+    });
 };

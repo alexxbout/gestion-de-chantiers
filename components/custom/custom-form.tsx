@@ -27,11 +27,23 @@ export interface CustomFormProps {
     onFormValuesChange?: (values: { [key: string]: any }) => void;
 }
 
+const getNestedValue = (obj: any, path: string) => {
+    return path.split(".").reduce((acc, part) => acc && acc[part], obj);
+};
+
+const setNestedValue = (obj: any, path: string, value: any) => {
+    const keys = path.split(".");
+    const lastKey = keys.pop();
+    const lastObj = keys.reduce((acc, key) => (acc[key] = acc[key] || {}), obj);
+    lastObj[lastKey!] = value;
+};
+
 const CustomForm = (props: CustomFormProps) => {
     const [formValues, setFormValues] = useState<{ [key: string]: any }>(props.data);
 
     const handleInputChange = (key: string, value: any) => {
-        const updatedValues = { ...formValues, [key]: value };
+        const updatedValues = { ...formValues };
+        setNestedValue(updatedValues, key, value);
         setFormValues(updatedValues);
         if (props.onFormValuesChange) {
             props.onFormValuesChange(updatedValues);
@@ -39,10 +51,8 @@ const CustomForm = (props: CustomFormProps) => {
     };
 
     useEffect(() => {
-        if (props.onFormValuesChange) {
-            props.onFormValuesChange(formValues);
-        }
-    }, []);
+        setFormValues(props.data);
+    }, [props.data]);
 
     return (
         <FormControl className="flex flex-col items-center justify-center w-full gap-y-5">
@@ -53,7 +63,7 @@ const CustomForm = (props: CustomFormProps) => {
                         switch (field.type) {
                             case "select":
                                 return field.options ? (
-                                    <Select selectedValue={formValues[field.key]} onValueChange={(value) => handleInputChange(field.key, value)}>
+                                    <Select selectedValue={getNestedValue(formValues, field.key)} onValueChange={(value) => handleInputChange(field.key, value)}>
                                         <SelectTrigger variant="outline" size="xl">
                                             <SelectInput placeholder={field.placeholder} />
                                             <SelectIcon className="mr-3" as={ChevronDownIcon} />
@@ -75,7 +85,7 @@ const CustomForm = (props: CustomFormProps) => {
                             default:
                                 return (
                                     <Input className="w-full" variant="outline" size="xl" isRequired={field.required}>
-                                        <InputField type="text" placeholder={field.placeholder} onChangeText={(text) => handleInputChange(field.key, text)} value={formValues[field.key] || ""} />
+                                        <InputField type="text" placeholder={field.placeholder} onChangeText={(text) => handleInputChange(field.key, text)} value={getNestedValue(formValues, field.key) || ""} />
                                     </Input>
                                 );
                         }

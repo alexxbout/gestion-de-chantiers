@@ -28,6 +28,12 @@ const Layout = () => {
     const [teamLead, setTeamLead] = useState<User | null>(null);
     const [teamWorkers, setTeamWorkers] = useState<User[]>([]);
 
+    const addDaysToDate = (date: Date, days: number) => {
+        const newDate = new Date(date);
+        newDate.setDate(newDate.getDate() + days);
+        return newDate;
+    };
+
     useEffect(() => {
         const fetchWorksite = async () => {
             try {
@@ -161,6 +167,12 @@ const Layout = () => {
                                 <View>
                                     <Text className="text-lg font-light text-gray-400">Date de début</Text>
                                     <Text className="text-lg font-light">{formatDate(worksite.startDate)}</Text>
+                                </View>
+                                <View>
+                                    <Text className="text-lg font-light text-gray-400">Nombre de jours</Text>
+                                    <Text className="text-lg font-light">
+                                        {worksite.duration} jours : {formatDate(addDaysToDate(worksite.startDate, worksite.duration))}
+                                    </Text>
                                 </View>
                                 <View>
                                     <Text className="text-lg font-light text-gray-400">Client</Text>

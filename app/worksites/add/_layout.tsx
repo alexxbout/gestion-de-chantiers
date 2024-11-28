@@ -1,5 +1,5 @@
 import { ToolSelector, VehicleSelector } from "@/components/custom/category-selector";
-import CustomForm, { CustomFormOption, CustomFormProps } from "@/components/custom/custom-form";
+import CustomForm, { CustomFormProps } from "@/components/custom/custom-form";
 import { Button, ButtonText } from "@/components/ui/button";
 import { AddIcon, CloseCircleIcon, Icon, SlashIcon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
@@ -15,17 +15,16 @@ const Layout = () => {
         setFormValues(values);
     };
 
-    const worksiteStatusOptions = Object.entries(WorksiteStatus).map(([label, value]): CustomFormOption => ({
+    const worksiteStatusOptions = Object.entries(WorksiteStatus).map(([label, value]) => ({
         label: value,
-        value: label.toLowerCase(),
-        disabled: false
+        value: value,
     }));
 
     const fields: CustomFormProps["fields"] = [
         { key: "title", label: "Titre", placeholder: "Saisir un titre", type: "text", required: true },
         { key: "description", label: "Description", placeholder: "Saisir une description", type: "text", required: true },
         { key: "status", label: "Statut", placeholder: "Choisir le statut du chantier", type: "select", options: worksiteStatusOptions, required: true },
-        { key: "start_date", label: "Date de début", placeholder: "jj/mm/aaaa", type: "text", required: true },
+        { key: "start_date", label: "Date de début", placeholder: "aaaa-mm-jj", type: "text", required: true },
         { key: "duration", label: "Nombre de demi-journées", placeholder: "0", type: "text", required: true },
         { key: "location", label: "Localisation", placeholder: "Saisir l'adresse complète du lieu", type: "text", required: true },
         { key: "client", label: "Client", placeholder: "Nom complet du client", type: "text", required: true },
