@@ -52,7 +52,7 @@ const Tab = () => {
                 </Button>
 
                 {filteredWorksites.map((worksite, index) => (
-                    <WorksiteCard key={index} id={worksite.id} title={worksite.title} description={worksite.description} startDate={worksite.startDate} status={worksite.status} pictures={worksite.pictures} />
+                    <WorksiteCard key={index} worksite={worksite} />
                 ))}
             </View>
         </ScrollView>

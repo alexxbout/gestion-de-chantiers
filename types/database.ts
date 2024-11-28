@@ -14,7 +14,7 @@ export interface User {
     name: string; // Nom de l'utilisateur
     email: string; // Email de l'utilisateur
     assignedChantiers: number[]; // Liste des chantiers assignés au chef de chantier
-    photoURL?: string; // URL de la photo de profil (facultatif)
+    picture?: Picture; // URL de la photo de profil (facultatif)
 }
 
 export interface Team {
@@ -79,5 +79,6 @@ export interface Defect {
 
 export interface Picture {
     id: number; // Identifiant unique de la photo
-    url: string; // URL de la photo stockée
+    type: "url" | "base64"; // Type de stockage de la photo
+    value: string; // URL de la photo stockée
 }

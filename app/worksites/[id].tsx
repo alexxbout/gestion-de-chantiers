@@ -140,7 +140,7 @@ const Layout = () => {
                     className="w-full h-80"
                     alt="worksite"
                     source={{
-                        uri: worksite.pictures.card.url,
+                        uri: worksite.pictures.card.value,
                     }}
                 />
 

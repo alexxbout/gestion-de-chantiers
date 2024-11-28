@@ -31,7 +31,8 @@
         "pictures": {
             "card": {
                 "id": 1,
-                "url": "https://images.unsplash.com/photo-1565599573128-ae3ef5c9f478?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                "type": "url",
+                "value": "https://images.unsplash.com/photo-1565599573128-ae3ef5c9f478?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             },
             "gallery": []
         }
@@ -62,7 +63,8 @@
         "pictures": {
             "card": {
                 "id": 3,
-                "url": "https://images.unsplash.com/photo-1433832597046-4f10e10ac764?q=80&w=1942&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                "type": "url",
+                "value": "https://images.unsplash.com/photo-1433832597046-4f10e10ac764?q=80&w=1942&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             },
             "gallery": []
         }
@@ -99,7 +101,8 @@
         "pictures": {
             "card": {
                 "id": 2,
-                "url": "https://images.unsplash.com/photo-1501681183400-962973118dc2?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                "type": "url",
+                "value": "https://images.unsplash.com/photo-1501681183400-962973118dc2?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             },
             "gallery": []
         }
@@ -136,7 +139,8 @@
         "pictures": {
             "card": {
                 "id": 1,
-                "url": "https://images.unsplash.com/photo-1547206704-8de50bc5ea83?q=80&w=3166&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                "type": "url",
+                "value": "https://images.unsplash.com/photo-1547206704-8de50bc5ea83?q=80&w=3166&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             },
             "gallery": []
         }
