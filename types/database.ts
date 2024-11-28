@@ -1,6 +1,6 @@
 import { ToolCategoryEnum, VehicleCategoryEnum, VehicleStatus } from "./components";
 
-export enum RessourceType {
+export enum CollectionName {
     VEHICLE = "vehicle",
     TOOL = "tool",
     WORKSITE = "worksite",

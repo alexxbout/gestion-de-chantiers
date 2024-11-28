@@ -1,7 +1,7 @@
 import WorksiteCard from "@/components/custom/worksite-card";
 import { Button, ButtonText } from "@/components/ui/button";
 import { getAllDocuments } from "@/config/firebaseConfig";
-import { RessourceType, Worksite, WorksiteStatus } from "@/types/database";
+import { CollectionName, Worksite, WorksiteStatus } from "@/types/database";
 import SegmentedControl, { NativeSegmentedControlIOSChangeEvent } from "@react-native-segmented-control/segmented-control";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -30,7 +30,7 @@ const Tab = () => {
     useEffect(() => {
         const fetchWorksites = async () => {
             try {
-                const fetchedWorksites = await getAllDocuments<Worksite[]>(RessourceType.WORKSITE);
+                const fetchedWorksites = await getAllDocuments<Worksite[]>(CollectionName.WORKSITE);
                 setWorksites(fetchedWorksites.flat());
 
                 console.log("Worksites fetched: ", fetchedWorksites);

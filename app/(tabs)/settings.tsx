@@ -3,21 +3,21 @@ import vehicleSample from "@/assets/samples/vehicle_sample.json";
 import worksiteSample from "@/assets/samples/worksite_sample.json";
 import { Button, ButtonText } from "@/components/ui/button";
 import { clearData, uploadDataToFirestore } from "@/config/firebaseConfig";
-import { RessourceType } from "@/types/database";
+import { CollectionName } from "@/types/database";
 import { View } from "react-native";
 
 const Tab = () => {
-    const add = (type: RessourceType) => {
+    const add = (type: CollectionName) => {
         console.log("Ajout de ressource de type", type);
 
         switch (type) {
-            case RessourceType.VEHICLE:
+            case CollectionName.VEHICLE:
                 uploadDataToFirestore(vehicleSample, type);
                 break;
-            case RessourceType.TOOL:
+            case CollectionName.TOOL:
                 uploadDataToFirestore(toolSample, type);
                 break;
-            case RessourceType.WORKSITE:
+            case CollectionName.WORKSITE:
                 uploadDataToFirestore(worksiteSample, type);
                 break;
             default:
@@ -27,9 +27,9 @@ const Tab = () => {
 
     const clear = () => {
         console.log("Effacement des ressources");
-        clearData(RessourceType.VEHICLE);
-        clearData(RessourceType.TOOL);
-        clearData(RessourceType.WORKSITE);
+        clearData(CollectionName.VEHICLE);
+        clearData(CollectionName.TOOL);
+        clearData(CollectionName.WORKSITE);
     };
 
     return (
@@ -38,15 +38,15 @@ const Tab = () => {
                 <ButtonText>Effacer toutes les données</ButtonText>
             </Button>
 
-            <Button onPress={() => add(RessourceType.VEHICLE)}>
+            <Button onPress={() => add(CollectionName.VEHICLE)}>
                 <ButtonText>Ajouter des véhicules</ButtonText>
             </Button>
 
-            <Button onPress={() => add(RessourceType.TOOL)}>
+            <Button onPress={() => add(CollectionName.TOOL)}>
                 <ButtonText>Ajouter des outils</ButtonText>
             </Button>
 
-            <Button onPress={() => add(RessourceType.WORKSITE)}>
+            <Button onPress={() => add(CollectionName.WORKSITE)}>
                 <ButtonText>Ajouter des chantiers</ButtonText>
             </Button>
         </View>

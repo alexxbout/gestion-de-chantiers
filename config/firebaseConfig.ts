@@ -1,4 +1,5 @@
 // src/firebaseConfig.ts
+import { CollectionName } from "@/types/database";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { addDoc, collection, deleteDoc, getDocs, getFirestore, query, where } from "firebase/firestore";
@@ -17,7 +18,7 @@ const app = initializeApp(firebaseConfig);
 export const FIREBASE_AUTH = getAuth(app);
 export const db = getFirestore(app);
 
-export const uploadDataToFirestore = async (file: any, collectionName: string): Promise<void> => {
+export const uploadDataToFirestore = async (file: any, collectionName: CollectionName): Promise<void> => {
     const collectionRef = collection(db, collectionName);
 
     for (const data of file) {
@@ -30,20 +31,24 @@ export const uploadDataToFirestore = async (file: any, collectionName: string): 
     }
 };
 
-export const findDocumentById = async (targetId: number, collectionName: string) => {
-    const q = query(collection(db, collectionName), where("id", "==", targetId));
+export const findDocumentById = async (id: number, collectionName: CollectionName) => {
+    const collectionRef = collection(db, collectionName);
+    const q = query(collectionRef, where("id", "==", id));
     const querySnapshot = await getDocs(q);
 
-    querySnapshot.forEach((doc) => {
-        console.log(`Document trouvé : ${doc.id} =>`, doc.data());
-    });
-
     if (querySnapshot.empty) {
-        console.log("Aucun document trouvé avec cet id.");
+        console.log("No matching documents.");
+        return null;
     }
+
+    const document = querySnapshot.docs[0].data();
+
+    console.log("Document data:", document);
+    
+    return document;
 };
 
-export const getAllDocuments = async <T>(collectionName: string): Promise<T[]> => {
+export const getAllDocuments = async <T>(collectionName: CollectionName): Promise<T[]> => {
     const collectionRef = collection(db, collectionName);
     const querySnapshot = await getDocs(collectionRef);
     const documents: any[] = [];
@@ -55,7 +60,7 @@ export const getAllDocuments = async <T>(collectionName: string): Promise<T[]> =
     return documents;
 };
 
-export const clearData = async (collectionName: string): Promise<void> => {
+export const clearData = async (collectionName: CollectionName): Promise<void> => {
     const collectionRef = collection(db, collectionName);
     const querySnapshot = await getDocs(collectionRef);
 
