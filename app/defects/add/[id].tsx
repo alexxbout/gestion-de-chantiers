@@ -95,7 +95,7 @@ const Layout = () => {
     const addDefect = () => {
         if (worksite) {
             const defect: Defect = {
-                id: worksite.defects.length || 0,
+                id: worksite.defects.length + 1,
                 description: formValues.description,
                 date: formValues.date,
             };
