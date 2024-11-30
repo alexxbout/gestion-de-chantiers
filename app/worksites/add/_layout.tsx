@@ -8,10 +8,13 @@ import { Text } from "@/components/ui/text";
 import { getAllDocuments, uploadDataToFirestore } from "@/config/firebaseConfig";
 import { VehicleStatus } from "@/types/components";
 import { CollectionName, Team, Tool, Vehicle, Worksite, WorksiteStatus } from "@/types/database";
+import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 
 const Layout = () => {
+    const router = useRouter();
+    
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
     const [tools, setTools] = useState<Tool[]>([]);
 
@@ -161,6 +164,8 @@ const Layout = () => {
         try {
             await uploadDataToFirestore([worksite], CollectionName.WORKSITE);
             console.log("Worksite sent:", worksite);
+
+            router.navigate("/worksites");
         } catch (error) {
             console.error("Error sending worksite:", error);
         }

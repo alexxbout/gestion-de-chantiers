@@ -3,8 +3,8 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { getAllDocuments } from "@/config/firebaseConfig";
 import { CollectionName, Worksite, WorksiteStatus } from "@/types/database";
 import SegmentedControl, { NativeSegmentedControlIOSChangeEvent } from "@react-native-segmented-control/segmented-control";
-import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useCallback, useState } from "react";
 import { NativeSyntheticEvent, ScrollView, View } from "react-native";
 
 const Tab = () => {
@@ -27,20 +27,21 @@ const Tab = () => {
         return false;
     });
 
-    useEffect(() => {
-        const fetchWorksites = async () => {
-            try {
-                const fetchedWorksites = await getAllDocuments<Worksite[]>(CollectionName.WORKSITE);
-                setWorksites(fetchedWorksites.flat());
+    const fetchWorksites = async () => {
+        try {
+            const fetchedWorksites = await getAllDocuments<Worksite[]>(CollectionName.WORKSITE);
+            setWorksites(fetchedWorksites.flat());
+            console.log("Worksites fetched: ", fetchedWorksites);
+        } catch (error) {
+            console.error("Error fetching worksites: ", error);
+        }
+    };
 
-                console.log("Worksites fetched: ", fetchedWorksites);
-            } catch (error) {
-                console.error("Error fetching worksites: ", error);
-            }
-        };
-
-        fetchWorksites();
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            fetchWorksites();
+        }, [])
+    );
 
     return (
         <ScrollView className="h-full p-6 bg-white">
