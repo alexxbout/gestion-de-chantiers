@@ -25,7 +25,6 @@ const Layout = () => {
     const [selectedTools, setSelectedTools] = useState<string[]>([]);
     const [imageURL, setImageURL] = useState<string>("");
 
-    // Fetch initial data
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -48,10 +47,10 @@ const Layout = () => {
         if (!start_date || !duration) {
             const updatedVehicles = vehicles.map((vehicle) => ({
                 ...vehicle,
-                isAvailable: null, // Gris, en attente de la date
+                isAvailable: null,
             }));
             setFilteredVehicles(updatedVehicles);
-            setSelectedVehicles([]); // Réinitialiser la sélection des véhicules
+            setSelectedVehicles([]);
             return;
         }
     
@@ -65,7 +64,7 @@ const Layout = () => {
         });
     
         setFilteredVehicles(updatedVehicles);
-        setSelectedVehicles([]); // Réinitialiser la sélection des véhicules
+        setSelectedVehicles([]);
     
         const updatedTeamOptions = teams.map((teamItem) => {
             const isAvailable = worksites.every((worksite) => {
@@ -82,12 +81,11 @@ const Layout = () => {
         });
         setTeamOptions(updatedTeamOptions);
     
-        // Si l'équipe sélectionnée devient indisponible, réinitialiser la sélection
         const selectedTeam = updatedTeamOptions.find((option) => option.value === team);
         if (selectedTeam && selectedTeam.disabled) {
             setFormValues((prevValues) => ({
                 ...prevValues,
-                team: null, // Réinitialise l'équipe sélectionnée
+                team: null,
             }));
         }
     }, [formValues, vehicles, teams, worksites]);
@@ -114,28 +112,23 @@ const Layout = () => {
         },
     ];
 
-    // Fonction de sélection des véhicules
     const toggleVehicleSelection = (vehicleId: string) => {
         setSelectedVehicles((prevSelected) => (prevSelected.includes(vehicleId) ? prevSelected.filter((id) => id !== vehicleId) : [...prevSelected, vehicleId]));
     };
 
-    // Fonction de sélection des outils
     const toggleToolSelection = (toolId: string) => {
         setSelectedTools((prevSelectedTools) => (prevSelectedTools.includes(toolId) ? prevSelectedTools.filter((t) => t !== toolId) : [...prevSelectedTools, toolId]));
     };
 
-    // fonction to get max id of the worksites
     const getMaxId = (worksites: Worksite[]) => {
         return worksites.reduce((maxId, worksite) => (worksite.id > maxId ? worksite.id : maxId), 0);
     };
 
     const handleFormSubmission = () => {
-        // Récupérer les véhicules et outils sélectionnés
         const selectedVehiclesIds = filteredVehicles.filter((vehicle) => selectedVehicles.includes(vehicle.id.toString())).map((vehicle) => vehicle.id);
 
         const selectedToolsIds = tools.filter((tool) => selectedTools.includes(tool.id.toString())).map((tool) => tool.id);
 
-        // Créer l'objet de type Worksite
         const newWorksite: Worksite = {
             id: getMaxId(worksites) + 1,
             title: formValues.title,
@@ -166,7 +159,6 @@ const Layout = () => {
 
     const sendWorksite = async (worksite: Worksite) => {
         try {
-            // Envoi du chantier à la base de données
             await uploadDataToFirestore([worksite], CollectionName.WORKSITE);
             console.log("Worksite sent:", worksite);
         } catch (error) {

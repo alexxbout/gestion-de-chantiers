@@ -7,8 +7,8 @@ import Category from "./category";
 
 interface ToolSelectorProps {
     tools: Tool[];
-    selectedTools: string[]; // L'état de sélection vient du parent
-    toggleToolSelection: (toolId: string) => void; // La fonction de gestion de sélection vient du parent
+    selectedTools: string[];
+    toggleToolSelection: (toolId: string) => void;
 }
 
 export const ToolSelector: React.FC<ToolSelectorProps> = ({ tools, selectedTools, toggleToolSelection }) => {
@@ -32,8 +32,8 @@ export const ToolSelector: React.FC<ToolSelectorProps> = ({ tools, selectedTools
 
 interface VehicleSelectorProps {
     vehicles: (Vehicle & { isAvailable: boolean | null })[];
-    selectedVehicles: string[]; // L'état de sélection vient du parent
-    toggleVehicleSelection: (vehicleId: string) => void; // La fonction de gestion de sélection vient du parent
+    selectedVehicles: string[];
+    toggleVehicleSelection: (vehicleId: string) => void;
 }
 
 export const VehicleSelector: React.FC<VehicleSelectorProps> = ({ vehicles, selectedVehicles, toggleVehicleSelection }) => {
