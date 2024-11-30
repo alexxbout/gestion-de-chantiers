@@ -1,44 +1,60 @@
-import CustomForm, { CustomFormProps } from "@/components/custom/custom-form";
-import { Box } from "@/components/ui/box";
+import CustomForm from "@/components/custom/custom-form";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
-import { CloseIcon, EditIcon, Icon } from "@/components/ui/icon";
-import { Modal, ModalBackdrop, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader } from "@/components/ui/modal";
+import { Modal, ModalBackdrop, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@/components/ui/modal";
 import { Text } from "@/components/ui/text";
 import { Toast, ToastTitle, useToast } from "@/components/ui/toast";
-import { WorksiteStatus } from "@/types/database";
+import { findDocumentById, updateDocument } from "@/config/firebaseConfig";
+import { CollectionName, Defect, Worksite } from "@/types/database";
 import { BlurView } from "expo-blur";
-import { useNavigation } from "expo-router";
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { ScrollView, View } from "react-native";
+import { ScrollView } from "react-native";
 
 const Layout = () => {
+    const router = useRouter();
+    const { id } = useLocalSearchParams();
     const navigation = useNavigation();
     const toast = useToast();
 
     const [validating, setValidating] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
-    const [showStatusModal, setShowStatusModal] = useState(false);
-    const [updateWorksiteStatus, setUpdateWorksiteStatus] = useState(false);
     const [toastId, setToastId] = useState<string>("");
 
-    const fields: CustomFormProps["fields"] = [
-        { key: "description", label: "Description", placeholder: "Décrire l'anomalie", type: "text", required: true },
-        { key: "date", label: "Date de l'anomalie", placeholder: "Saisir la date de l'anomalie", type: "date", required: true },
-    ];
+    const [formValues, setFormValues] = useState<{ [key: string]: any }>({
+        description: "",
+        date: "",
+    });
 
-    const worksiteStatusOptions = Object.entries(WorksiteStatus).map(([label, value]) => ({
-        label: value,
-        value: label.toLowerCase(),
-    }));
+    const handleFormValuesChange = (values: { [key: string]: any }) => {
+        setFormValues((prev) => ({
+            ...prev,
+            ...values,
+        }));
+    };
 
-    const worksiteStatusField: CustomFormProps["fields"] = [{ key: "status", label: "Statut du chantier", placeholder: "Sélectionner le statut du chantier", type: "select", options: worksiteStatusOptions, required: true }];
+    const [worksite, setWorksite] = useState<Worksite | null>(null);
+
+    useEffect(() => {
+        const fetchWorksite = async () => {
+            try {
+                const fetchedWorksite = await findDocumentById(Number.parseInt(id as string), CollectionName.WORKSITE);
+                setWorksite(fetchedWorksite as Worksite);
+            } catch (error) {
+                console.error("Error fetching worksite: ", error);
+            }
+        };
+
+        if (id) {
+            fetchWorksite();
+        }
+    }, [id]);
 
     useEffect(() => {
         navigation.setOptions({
-            headerShown: !(showConfirmModal || showStatusModal),
+            headerShown: !showConfirmModal,
         });
-    }, [showConfirmModal, showStatusModal, navigation]);
+    }, [showConfirmModal, navigation]);
 
     const handleSubmit = () => {
         setValidating(true);
@@ -47,10 +63,12 @@ const Layout = () => {
 
     const handleConfirmAnomaly = () => {
         setShowConfirmModal(false);
-        setShowStatusModal(true);
 
         if (!toast.isActive(toastId)) {
             showToast();
+            addDefect();
+
+            router.back();
         }
     };
 
@@ -59,7 +77,7 @@ const Layout = () => {
         setToastId(newId);
         toast.show({
             id: newId,
-            placement: 'top',
+            placement: "top",
             duration: 3000,
             render: ({ id }) => (
                 <Toast nativeID={"toast-" + id} action="success" variant="solid">
@@ -71,15 +89,48 @@ const Layout = () => {
 
     const handleClose = () => {
         setShowConfirmModal(false);
-        setShowStatusModal(false);
         setValidating(false);
-        setUpdateWorksiteStatus(false);
+    };
+
+    const addDefect = () => {
+        if (worksite) {
+            const defect: Defect = {
+                id: worksite.defects.length || 0,
+                description: formValues.description,
+                date: formValues.date,
+            };
+
+            worksite.defects.push(defect);
+
+            updateDocument(Number.parseInt(id as string), CollectionName.WORKSITE, worksite);
+        } else {
+            console.error("Error adding defect: worksite not found");
+        }
     };
 
     return (
         <>
             <ScrollView className="p-6 bg-white">
-                <CustomForm data={[]} fields={fields} />
+                <CustomForm
+                    data={formValues}
+                    fields={[
+                        {
+                            key: "description",
+                            label: "Description",
+                            placeholder: "Décrire l'anomalie",
+                            type: "text",
+                            required: true,
+                        },
+                        {
+                            key: "date",
+                            label: "Date de l'anomalie",
+                            placeholder: "aaaa-mm-jj",
+                            type: "date",
+                            required: true,
+                        },
+                    ]}
+                    onFormValuesChange={(values) => handleFormValuesChange(values)}
+                />
             </ScrollView>
 
             <BlurView className="shadow-[0px_-15px_60px_5px_rgba(0,0,0,0.1)] absolute bottom-0 flex flex-row items-center justify-center w-screen p-4 h-max" intensity={25} tint="light">
@@ -105,41 +156,6 @@ const Layout = () => {
                                 </Button>
                                 <Button onPress={handleConfirmAnomaly} className="w-full">
                                     <ButtonText>Confirmer</ButtonText>
-                                </Button>
-                            </ModalFooter>
-                        </ModalContent>
-                    </Modal>
-
-                    <Modal isOpen={showStatusModal} onClose={handleClose} size="md">
-                        <ModalBackdrop />
-                        <ModalContent>
-                            <ModalHeader className="flex flex-col gap-y-5">
-                                <View className="flex flex-row justify-center w-full">
-                                    <Box className="flex items-center justify-center p-4 ml-auto bg-red-100 rounded-full w-max h-max aspect-square">
-                                        <Icon as={EditIcon} size="xl" color="red" />
-                                    </Box>
-                                    <ModalCloseButton className="ml-auto">
-                                        <Icon as={CloseIcon} size="md" className="stroke-background-400 group-[:hover]/modal-close-button:stroke-background-700 group-[:active]/modal-close-button:stroke-background-900 group-[:focus-visible]/modal-close-button:stroke-background-900" />
-                                    </ModalCloseButton>
-                                </View>
-                                <Heading size="md">Souhaitez-vous mettre à jour le statut du chantier ?</Heading>
-                            </ModalHeader>
-                            <ModalBody>
-                                <Text size="sm">Certaines anomalies nécessitent une modification du statut actuel du chantier.</Text>
-                                {updateWorksiteStatus && <CustomForm data={[]} fields={worksiteStatusField} />}
-                            </ModalBody>
-                            <ModalFooter className="flex flex-col">
-                                {!updateWorksiteStatus && (
-                                    <Button className="w-full" variant="outline" action="secondary" onPress={handleClose}>
-                                        <ButtonText>Ne pas modifier</ButtonText>
-                                    </Button>
-                                )}
-                                <Button
-                                    className="w-full"
-                                    onPress={() => {
-                                        setUpdateWorksiteStatus(true);
-                                    }}>
-                                    <ButtonText>{updateWorksiteStatus ? "Valider le statut" : "Mettre à jour"}</ButtonText>
                                 </Button>
                             </ModalFooter>
                         </ModalContent>
