@@ -5,7 +5,7 @@ import { AddIcon, CloseCircleIcon, Icon, SlashIcon } from "@/components/ui/icon"
 import { Image } from "@/components/ui/image";
 import { Input, InputField } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
-import { getAllDocuments } from "@/config/firebaseConfig";
+import { getAllDocuments, uploadDataToFirestore } from "@/config/firebaseConfig";
 import { VehicleStatus } from "@/types/components";
 import { CollectionName, Team, Tool, Vehicle, Worksite, WorksiteStatus } from "@/types/database";
 import React, { useEffect, useState } from "react";
@@ -124,6 +124,11 @@ const Layout = () => {
         setSelectedTools((prevSelectedTools) => (prevSelectedTools.includes(toolId) ? prevSelectedTools.filter((t) => t !== toolId) : [...prevSelectedTools, toolId]));
     };
 
+    // fonction to get max id of the worksites
+    const getMaxId = (worksites: Worksite[]) => {
+        return worksites.reduce((maxId, worksite) => (worksite.id > maxId ? worksite.id : maxId), 0);
+    };
+
     const handleFormSubmission = () => {
         // Récupérer les véhicules et outils sélectionnés
         const selectedVehiclesIds = filteredVehicles.filter((vehicle) => selectedVehicles.includes(vehicle.id.toString())).map((vehicle) => vehicle.id);
@@ -132,10 +137,10 @@ const Layout = () => {
 
         // Créer l'objet de type Worksite
         const newWorksite: Worksite = {
-            id: 1, // Remplacez par un ID dynamique ou générez-le
+            id: getMaxId(worksites) + 1,
             title: formValues.title,
             description: formValues.description,
-            status: WorksiteStatus.IN_PROGRESS, // Remplacez par une valeur appropriée
+            status: WorksiteStatus.NOT_STARTED,
             startDate: new Date(formValues.start_date),
             duration: parseInt(formValues.duration, 10),
             location: formValues.location,
@@ -149,7 +154,6 @@ const Layout = () => {
             defects: [],
             pictures: {
                 card: {
-                    id: 1, // Remplacez par un ID dynamique
                     type: "url",
                     value: imageURL,
                 },
@@ -157,9 +161,18 @@ const Layout = () => {
             },
         };
 
-        // Log l'objet Worksite dans la console
-        console.log("Worksite Object:", newWorksite);
+        sendWorksite(newWorksite);
     };
+
+    const sendWorksite = async (worksite: Worksite) => {
+        try {
+            // Envoi du chantier à la base de données
+            await uploadDataToFirestore([worksite], CollectionName.WORKSITE);
+            console.log("Worksite sent:", worksite);
+        } catch (error) {
+            console.error("Error sending worksite:", error);
+        }
+    }
 
     return (
         <ScrollView className="p-6 bg-white">

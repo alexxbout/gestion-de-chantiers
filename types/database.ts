@@ -78,7 +78,6 @@ export interface Defect {
 }
 
 export interface Picture {
-    id: number; // Identifiant unique de la photo
     type: "url" | "base64"; // Type de stockage de la photo
     value: string; // URL de la photo stockée
 }
