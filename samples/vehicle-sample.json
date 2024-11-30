@@ -3,8 +3,8 @@
         "id": 1,
         "model": "beton",
         "period": {
-            "start": "2024-01-01T08:00:00.000Z",
-            "end": "2024-01-01T18:00:00.000Z"
+            "start": null,
+            "end": null
         },
         "status": "disponible"
     },
@@ -12,8 +12,8 @@
         "id": 2,
         "model": "camion",
         "period": {
-            "start": "2024-01-02T09:00:00.000Z",
-            "end": "2024-01-02T17:00:00.000Z"
+            "start": null,
+            "end": null
         },
         "status": "En maintenance"
     },

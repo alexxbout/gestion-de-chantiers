@@ -60,8 +60,8 @@ export interface Vehicle {
     model: VehicleCategoryEnum; // Modèle du véhicule
     period: {
         // Période de réservation
-        start: Date;
-        end: Date;
+        start: Date | null;
+        end: Date | null;
     };
     status: VehicleStatus; // Statut du véhicule
 }
