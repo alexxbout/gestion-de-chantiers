@@ -38,36 +38,51 @@ const Layout = () => {
     }, []);
 
     useEffect(() => {
-        const { start_date, duration } = formValues;
-
+        const { start_date, duration, team } = formValues;
+    
         if (start_date && duration) {
             const startDate = new Date(start_date);
             const endDate = new Date(startDate);
             endDate.setDate(startDate.getDate() + parseInt(duration, 10));
-
-            // Filter vehicles
+    
+            // Filtrer les véhicules
             const updatedVehicles = vehicles.map((vehicle) => {
-                const isAvailable = vehicle.status === VehicleStatus.AVAILABLE && (!vehicle.period.start || !vehicle.period.end || new Date(vehicle.period.end) < startDate || new Date(vehicle.period.start) > endDate);
+                const isAvailable = 
+                    vehicle.status === VehicleStatus.AVAILABLE &&
+                    (!vehicle.period.start || !vehicle.period.end || new Date(vehicle.period.end) < startDate || new Date(vehicle.period.start) > endDate);
                 return { ...vehicle, isAvailable };
             });
             setFilteredVehicles(updatedVehicles);
-
-            // Generate team options
-            const updatedTeamOptions = teams.map((team) => {
+    
+            // Générer les options des équipes
+            const updatedTeamOptions = teams.map((teamItem) => {
                 const isAvailable = worksites.every((worksite) => {
                     const worksiteStart = new Date(worksite.startDate);
                     const worksiteEnd = new Date(worksiteStart);
                     worksiteEnd.setDate(worksiteStart.getDate() + worksite.duration);
-
-                    return worksite.team !== team.id || worksiteEnd < startDate || worksiteStart > endDate;
+    
+                    return (
+                        worksite.team !== teamItem.id ||
+                        worksiteEnd < startDate ||
+                        worksiteStart > endDate
+                    );
                 });
                 return {
-                    label: `${team.name}${!isAvailable ? " (Indisponible)" : ""}`,
-                    value: team.id.toString(),
+                    label: `${teamItem.name}${!isAvailable ? " (Indisponible)" : ""}`,
+                    value: teamItem.id.toString(),
                     disabled: !isAvailable,
                 };
             });
             setTeamOptions(updatedTeamOptions);
+    
+            // Déselectionner l'équipe si elle devient indisponible
+            const selectedTeam = updatedTeamOptions.find((option) => option.value === team);
+            if (selectedTeam && selectedTeam.disabled) {
+                setFormValues((prevValues) => ({
+                    ...prevValues,
+                    team: null, // Réinitialise la sélection
+                }));
+            }
         }
     }, [formValues, vehicles, teams, worksites]);
 
@@ -78,11 +93,11 @@ const Layout = () => {
     const fields: CustomFormProps["fields"] = [
         { key: "title", label: "Titre", placeholder: "Saisir un titre", type: "text", required: true },
         { key: "description", label: "Description", placeholder: "Saisir une description", type: "text", required: true },
-        { key: "start_date", label: "Date de début", placeholder: "aaaa-mm-jj", type: "text", required: true },
-        { key: "duration", label: "Nombre de jours", placeholder: "0", type: "text", required: true },
         { key: "location", label: "Localisation", placeholder: "Saisir l'adresse complète", type: "text", required: true },
         { key: "client", label: "Client", placeholder: "Nom complet du client", type: "text", required: true },
         { key: "phone", label: "Numéro de téléphone", placeholder: "0123456789", type: "text", required: true },
+        { key: "start_date", label: "Date de début", placeholder: "aaaa-mm-jj", type: "text", required: true },
+        { key: "duration", label: "Nombre de jours", placeholder: "0", type: "text", required: true },
         {
             key: "team",
             label: "Sélectionner une équipe",
