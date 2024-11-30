@@ -33,6 +33,15 @@ const Tab = () => {
         }
     };
 
+    const addAll = () => {
+        console.log("Ajout de toutes les ressources");
+        add(CollectionName.VEHICLE);
+        add(CollectionName.TOOL);
+        add(CollectionName.WORKSITE);
+        add(CollectionName.USER);
+        add(CollectionName.TEAM);
+    }
+
     const clear = () => {
         console.log("Effacement des ressources");
         clearData(CollectionName.VEHICLE);
@@ -46,6 +55,10 @@ const Tab = () => {
         <View className="flex flex-col h-full p-5 bg-white gap-y-5">
             <Button onPress={() => clear()} action="negative">
                 <ButtonText>Effacer toutes les données</ButtonText>
+            </Button>
+
+            <Button onPress={() => addAll()} action="positive">
+                <ButtonText>Ajouter toutes les ressources</ButtonText>
             </Button>
 
             <Button onPress={() => add(CollectionName.VEHICLE)}>
