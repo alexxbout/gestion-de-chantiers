@@ -38,6 +38,8 @@ const Tab = () => {
         clearData(CollectionName.VEHICLE);
         clearData(CollectionName.TOOL);
         clearData(CollectionName.WORKSITE);
+        clearData(CollectionName.USER);
+        clearData(CollectionName.TEAM);
     };
 
     return (
