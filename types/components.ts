@@ -39,8 +39,6 @@ export enum VehicleCategoryEnum {
 }
 
 export enum VehicleStatus {
-    UNAVAILABLE = "indisponible",
-    AVAILABLE = "disponible",
+    AVAILABLE = "En fonction",
     MAINTENANCE = "En maintenance",
-    IN_USE = "En utilisation",
 }

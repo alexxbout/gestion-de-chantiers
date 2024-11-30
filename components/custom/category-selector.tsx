@@ -1,7 +1,8 @@
-import { CategoryEnum, ToolCategoryEnum, VehicleCategoryEnum, VehicleStatus } from "@/types/components";
+import { CategoryEnum, ToolCategoryEnum, VehicleStatus } from "@/types/components";
+import { Vehicle } from "@/types/database";
 import React, { useState } from "react";
 import { Pressable, View } from "react-native";
-import { AddIcon, CloseCircleIcon, Icon, RemoveIcon, SlashIcon } from "../ui/icon";
+import { AddIcon, CloseCircleIcon, Icon, RemoveIcon } from "../ui/icon";
 import Tool from "./tool";
 
 export const ToolSelector = () => {
@@ -42,42 +43,36 @@ export const ToolSelector = () => {
     return <View className="grid grid-cols-4 gap-10 p-3 pt-4 rounded-md place-items-center bg-card">{sortedTools.map(renderTool)}</View>;
 };
 
-export const VehicleSelector = (props: { status: VehicleStatus }) => {
-    const [selectedVehicles, setSelectedVehicles] = useState<string[]>([]);
+interface VehicleSelectorProps {
+    vehicles: (Vehicle & { isAvailable: boolean | null })[]; // null = information manquante
+}
 
-    const toggleVehicleSelection = (vehicle: string) => {
-        if (props.status === "disponible") {
-            setSelectedVehicles((prevSelectedVehicles) => (prevSelectedVehicles.includes(vehicle) ? prevSelectedVehicles.filter((v) => v !== vehicle) : [...prevSelectedVehicles, vehicle]));
-        }
-    };
-
-    const renderVehicle = (vehicle: string) => {
-        const isSelected = selectedVehicles.includes(vehicle);
+export const VehicleSelector: React.FC<VehicleSelectorProps> = ({ vehicles }) => {
+    const renderVehicle = (vehicle: Vehicle & { isAvailable: boolean | null }) => {
         let icon, iconClass;
 
-        switch (props.status) {
-            case VehicleStatus.AVAILABLE:
-                icon = isSelected ? RemoveIcon : AddIcon;
-                iconClass = isSelected ? "bg-red-500" : "bg-green-500";
-                break;
-            case VehicleStatus.IN_USE:
-                icon = SlashIcon;
-                iconClass = "bg-red-500";
-                break;
-            case VehicleStatus.MAINTENANCE:
-                icon = CloseCircleIcon;
-                iconClass = "bg-orange-500";
-                break;
-            default:
-                icon = isSelected ? RemoveIcon : AddIcon;
-                iconClass = isSelected ? "bg-red-500" : "bg-green-500";
-                break;
+        if (vehicle.isAvailable === null) {
+            // Informations manquantes
+            icon = RemoveIcon;
+            iconClass = "bg-gray-500";
+        } else if (vehicle.isAvailable) {
+            // Disponible
+            icon = AddIcon;
+            iconClass = "bg-green-500";
+        } else if (vehicle.status === VehicleStatus.MAINTENANCE) {
+            // En maintenance
+            icon = CloseCircleIcon;
+            iconClass = "bg-orange-500";
+        } else {
+            // Indisponible
+            icon = CloseCircleIcon;
+            iconClass = "bg-red-500";
         }
 
         return (
-            <Pressable key={vehicle} className="relative" onPress={() => toggleVehicleSelection(vehicle)}>
-                <View className={`${isSelected ? "opacity-100" : "opacity-60"}`}>
-                    <Tool category={CategoryEnum.VEHICLES} name={vehicle} isLarge={true} showTitle={true} />
+            <Pressable key={vehicle.id} className="relative">
+                <View className="opacity-80">
+                    <Tool category={CategoryEnum.VEHICLES} name={vehicle.model} isLarge={true} showTitle={true} />
                 </View>
                 <View className={`absolute p-1 ${iconClass} rounded-full -top-1 -right-1`}>
                     <Icon as={icon} className="w-4 h-4 text-white" />
@@ -86,13 +81,9 @@ export const VehicleSelector = (props: { status: VehicleStatus }) => {
         );
     };
 
-    const sortedVehicles = Object.values(VehicleCategoryEnum).sort((a, b) => {
-        const aSelected = selectedVehicles.includes(a);
-        const bSelected = selectedVehicles.includes(b);
-        if (aSelected && !bSelected) return -1;
-        if (!aSelected && bSelected) return 1;
-        return 0;
-    });
-
-    return <View className="grid grid-cols-4 gap-10 p-3 pt-4 rounded-md place-items-center bg-card">{sortedVehicles.map(renderVehicle)}</View>;
+    return (
+        <View className="grid grid-cols-4 gap-10 p-3 pt-4 rounded-md bg-card">
+            {vehicles.map(renderVehicle)}
+        </View>
+    );
 };

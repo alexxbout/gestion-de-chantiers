@@ -6,7 +6,7 @@
             "start": null,
             "end": null
         },
-        "status": "disponible"
+        "status": "En fonction"
     },
     {
         "id": 2,
@@ -15,42 +15,42 @@
             "start": null,
             "end": null
         },
-        "status": "En maintenance"
+        "status": "En fonction"
     },
     {
         "id": 3,
         "model": "construction",
         "period": {
-            "start": "2024-01-03T10:00:00.000Z",
-            "end": "2024-01-03T16:00:00.000Z"
+            "start": "2024-01-01T10:00:00.000Z",
+            "end": "2024-01-25T16:00:00.000Z"
         },
-        "status": "En utilisation"
+        "status": "En fonction"
     },
     {
         "id": 4,
         "model": "destruction",
         "period": {
-            "start": "2024-01-04T11:00:00.000Z",
-            "end": "2024-01-04T15:00:00.000Z"
+            "start": null,
+            "end": null
         },
-        "status": "disponible"
+        "status": "En fonction"
     },
     {
         "id": 5,
         "model": "grue",
         "period": {
-            "start": "2024-01-05T12:00:00.000Z",
-            "end": "2024-01-05T14:00:00.000Z"
+            "start": null,
+            "end": null
         },
-        "status": "En maintenance"
+        "status": "En fonction"
     },
     {
         "id": 6,
         "model": "levage",
         "period": {
-            "start": "2024-01-06T07:00:00.000Z",
-            "end": "2024-01-06T12:00:00.000Z"
+            "start": "2024-01-01T10:00:00.000Z",
+            "end": "2024-01-25T16:00:00.000Z"
         },
-        "status": "En utilisation"
+        "status": "En maintenance"
     }
 ]
