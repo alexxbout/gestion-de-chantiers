@@ -2,17 +2,20 @@ import { ToolSelector, VehicleSelector } from "@/components/custom/category-sele
 import CustomForm, { CustomFormProps } from "@/components/custom/custom-form";
 import { Button, ButtonText } from "@/components/ui/button";
 import { AddIcon, CloseCircleIcon, Icon, SlashIcon } from "@/components/ui/icon";
+import { Image } from "@/components/ui/image";
 import { Text } from "@/components/ui/text";
 import { getAllDocuments } from "@/config/firebaseConfig";
 import { VehicleStatus } from "@/types/components";
 import { CollectionName, Vehicle } from "@/types/database";
 import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
+import { TextInput } from "react-native-gesture-handler";
 
 const Layout = () => {
     const [formValues, setFormValues] = useState<{ [key: string]: any }>({});
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
     const [filteredVehicles, setFilteredVehicles] = useState<(Vehicle & { isAvailable: boolean | null })[]>([]);
+    const [imageURL, setImageURL] = useState<string>("");
 
     // Récupère les véhicules depuis Firebase au chargement du composant
     useEffect(() => {
@@ -38,11 +41,7 @@ const Layout = () => {
             endDate.setDate(startDate.getDate() + parseInt(duration, 10));
 
             const updatedVehicles = vehicles.map((vehicle) => {
-                const isAvailable =
-                    vehicle.status === VehicleStatus.AVAILABLE &&
-                    (!vehicle.period.start ||
-                        !vehicle.period.end ||
-                        (new Date(vehicle.period.end) < startDate || new Date(vehicle.period.start) > endDate));
+                const isAvailable = vehicle.status === VehicleStatus.AVAILABLE && (!vehicle.period.start || !vehicle.period.end || new Date(vehicle.period.end) < startDate || new Date(vehicle.period.start) > endDate);
 
                 return { ...vehicle, isAvailable }; // Utilisation temporaire pour déterminer si disponible
             });
@@ -70,6 +69,12 @@ const Layout = () => {
 
     return (
         <ScrollView className="p-6 bg-white">
+            <View className="flex flex-col mb-3">
+                <Text className="mb-3 text-gray-500">Image de présentation</Text>
+                <TextInput value={imageURL} onChangeText={setImageURL} placeholder="Saisir une URL d'image" className="p-3 border border-gray-300 rounded-md" />
+                {imageURL ? <Image source={{ uri: imageURL }} className="w-full h-[400px] mt-3 rounded-md" resizeMode="cover" /> : <Text className="mt-3 text-gray-400">Aucune image chargée</Text>}
+            </View>
+
             <CustomForm data={formValues} fields={fields} onFormValuesChange={handleFormValuesChange} />
 
             <View className="flex flex-col mt-10 gap-y-3">
@@ -97,7 +102,7 @@ const Layout = () => {
                         <Text>En utilisation</Text>
                     </View>
                 </View>
-                
+
                 <VehicleSelector vehicles={filteredVehicles} />
             </View>
 
