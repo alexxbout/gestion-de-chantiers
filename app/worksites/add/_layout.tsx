@@ -1,5 +1,5 @@
 import { ToolSelector, VehicleSelector } from "@/components/custom/category-selector";
-import CustomForm, { CustomFormProps } from "@/components/custom/custom-form";
+import CustomForm, { CustomFormOption, CustomFormProps } from "@/components/custom/custom-form";
 import { Button, ButtonText } from "@/components/ui/button";
 import { AddIcon, CloseCircleIcon, Icon, SlashIcon } from "@/components/ui/icon";
 import { Image } from "@/components/ui/image";
@@ -7,31 +7,36 @@ import { Input, InputField } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { getAllDocuments } from "@/config/firebaseConfig";
 import { VehicleStatus } from "@/types/components";
-import { CollectionName, Vehicle } from "@/types/database";
+import { CollectionName, Team, Vehicle, Worksite } from "@/types/database";
 import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 
 const Layout = () => {
-    const [formValues, setFormValues] = useState<{ [key: string]: any }>({});
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+    const [teams, setTeams] = useState<Team[]>([]);
+    const [worksites, setWorksites] = useState<Worksite[]>([]);
+
+    const [formValues, setFormValues] = useState<{ [key: string]: any }>({});
     const [filteredVehicles, setFilteredVehicles] = useState<(Vehicle & { isAvailable: boolean | null })[]>([]);
+    const [teamOptions, setTeamOptions] = useState<CustomFormOption[]>([]);
     const [imageURL, setImageURL] = useState<string>("");
 
-    // Récupère les véhicules depuis Firebase au chargement du composant
+    // Fetch initial data
     useEffect(() => {
-        const fetchVehicles = async () => {
+        const fetchData = async () => {
             try {
-                const fetchedVehicles = await getAllDocuments<Vehicle>(CollectionName.VEHICLE);
+                const [fetchedVehicles, fetchedTeams, fetchedWorksites] = await Promise.all([getAllDocuments<Vehicle>(CollectionName.VEHICLE), getAllDocuments<Team>(CollectionName.TEAM), getAllDocuments<Worksite>(CollectionName.WORKSITE)]);
                 setVehicles(fetchedVehicles);
+                setTeams(fetchedTeams);
+                setWorksites(fetchedWorksites);
             } catch (error) {
-                console.error("Error fetching vehicles: ", error);
+                console.error("Error fetching data: ", error);
             }
         };
 
-        fetchVehicles();
+        fetchData();
     }, []);
 
-    // Filtre les véhicules selon les dates fournies
     useEffect(() => {
         const { start_date, duration } = formValues;
 
@@ -40,18 +45,31 @@ const Layout = () => {
             const endDate = new Date(startDate);
             endDate.setDate(startDate.getDate() + parseInt(duration, 10));
 
+            // Filter vehicles
             const updatedVehicles = vehicles.map((vehicle) => {
                 const isAvailable = vehicle.status === VehicleStatus.AVAILABLE && (!vehicle.period.start || !vehicle.period.end || new Date(vehicle.period.end) < startDate || new Date(vehicle.period.start) > endDate);
-
-                return { ...vehicle, isAvailable }; // Utilisation temporaire pour déterminer si disponible
+                return { ...vehicle, isAvailable };
             });
-
             setFilteredVehicles(updatedVehicles);
-        } else {
-            // Si aucune date n'est fournie, tous les véhicules nécessitent plus d'informations
-            setFilteredVehicles(vehicles.map((vehicle) => ({ ...vehicle, isAvailable: null })));
+
+            // Generate team options
+            const updatedTeamOptions = teams.map((team) => {
+                const isAvailable = worksites.every((worksite) => {
+                    const worksiteStart = new Date(worksite.startDate);
+                    const worksiteEnd = new Date(worksiteStart);
+                    worksiteEnd.setDate(worksiteStart.getDate() + worksite.duration);
+
+                    return worksite.team !== team.id || worksiteEnd < startDate || worksiteStart > endDate;
+                });
+                return {
+                    label: `${team.name}${!isAvailable ? " (Indisponible)" : ""}`,
+                    value: team.id.toString(),
+                    disabled: !isAvailable,
+                };
+            });
+            setTeamOptions(updatedTeamOptions);
         }
-    }, [formValues, vehicles]);
+    }, [formValues, vehicles, teams, worksites]);
 
     const handleFormValuesChange = (values: { [key: string]: any }) => {
         setFormValues(values);
@@ -65,6 +83,14 @@ const Layout = () => {
         { key: "location", label: "Localisation", placeholder: "Saisir l'adresse complète", type: "text", required: true },
         { key: "client", label: "Client", placeholder: "Nom complet du client", type: "text", required: true },
         { key: "phone", label: "Numéro de téléphone", placeholder: "0123456789", type: "text", required: true },
+        {
+            key: "team",
+            label: "Sélectionner une équipe",
+            placeholder: "Choisir une équipe",
+            type: "select",
+            required: true,
+            options: teamOptions,
+        },
     ];
 
     return (
