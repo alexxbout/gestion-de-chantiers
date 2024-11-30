@@ -1,43 +1,39 @@
 import DefectCard from "@/components/custom/defect";
 import { Button, ButtonText } from "@/components/ui/button";
-import { Defect } from "@/types/database";
+import { findDocumentById } from "@/config/firebaseConfig";
+import { CollectionName, Worksite } from "@/types/database";
 import { BlurView } from "expo-blur";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 
 const Layout = () => {
-    // TODO: Load worksites info from the database
     const router = useRouter();
-
-    const defects: Defect[] = [
-        {
-            id: 1,
-            description: "Fortes intempéries",
-            date: "2024-06-03",
-            reportedBy: "Alexandre Boutinaud",
-        },
-        {
-            id: 2,
-            description: "Panne de matériel",
-            date: "2024-06-03",
-            reportedBy: "Alexandre Boutinaud",
-        },
-        {
-            id: 3,
-            description: "Absence d'électricité",
-            date: "2024-06-03",
-            reportedBy: "Alexandre Boutinaud",
-        },
-    ];
-
     const { id } = useLocalSearchParams();
+
+    const [worksite, setWorksite] = useState<Worksite | null>();
+
+    useEffect(() => {
+        const fetchWorksite = async () => {
+            try {
+                const fetchedWorksite = await findDocumentById(Number.parseInt(id as string), CollectionName.WORKSITE);
+                setWorksite(fetchedWorksite as Worksite);
+            } catch (error) {
+                console.error("Error fetching worksite: ", error);
+            }
+        };
+
+        if (id) {
+            fetchWorksite();
+        }
+    }, [id]);
 
     return (
         <>
             <ScrollView className="bg-white">
                 <View className="flex justify-center p-5 gap-y-4">
-                    {defects.map((defect, index) => (
-                        <DefectCard key={index} id={defect.id} description={defect.description} date={defect.date} reportedBy={defect.reportedBy} />
+                    {worksite && worksite.defects.map((defect, index) => (
+                        <DefectCard key={index} id={defect.id} description={defect.description} date={defect.date} />
                     ))}
                 </View>
             </ScrollView>

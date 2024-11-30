@@ -215,9 +215,9 @@ const Layout = () => {
                         <View className="flex gap-y-5">
                             <Text className="text-2xl text-black">Photos</Text>
                             <View className="flex flex-row overflow-x-auto gap-x-5 snap-x">
-                                {worksite.pictures.gallery.map((picture) => (
+                                {worksite.pictures.gallery.map((picture, index) => (
                                     <Image
-                                        key={picture.id}
+                                        key={index}
                                         className="rounded-md h-[200px] w-[250px] snap-center"
                                         alt="worksite"
                                         source={{
