@@ -3,13 +3,13 @@ import CustomForm, { CustomFormProps } from "@/components/custom/custom-form";
 import { Button, ButtonText } from "@/components/ui/button";
 import { AddIcon, CloseCircleIcon, Icon, SlashIcon } from "@/components/ui/icon";
 import { Image } from "@/components/ui/image";
+import { Input, InputField } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { getAllDocuments } from "@/config/firebaseConfig";
 import { VehicleStatus } from "@/types/components";
 import { CollectionName, Vehicle } from "@/types/database";
 import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
 
 const Layout = () => {
     const [formValues, setFormValues] = useState<{ [key: string]: any }>({});
@@ -71,7 +71,9 @@ const Layout = () => {
         <ScrollView className="p-6 bg-white">
             <View className="flex flex-col mb-3">
                 <Text className="mb-3 text-gray-500">Image de présentation</Text>
-                <TextInput value={imageURL} onChangeText={setImageURL} placeholder="Saisir une URL d'image" className="p-3 border border-gray-300 rounded-md" />
+                <Input className="w-full" variant="outline" size="xl" isRequired={true}>
+                    <InputField type="text" placeholder="Saisir une URL d'image" onChangeText={setImageURL} value={imageURL} />
+                </Input>
                 {imageURL ? <Image source={{ uri: imageURL }} className="w-full h-[400px] mt-3 rounded-md" resizeMode="cover" /> : <Text className="mt-3 text-gray-400">Aucune image chargée</Text>}
             </View>
 
