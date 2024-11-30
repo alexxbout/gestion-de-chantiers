@@ -31,7 +31,7 @@ const imagePaths: { [key in CategoryEnum]: { [key: string]: any } } = {
     },
 };
 
-const Tool = (props: { category: CategoryEnum; name: string; isLarge?: boolean; showTitle?: boolean }) => {
+const Category = (props: { category: CategoryEnum; name: string; isLarge?: boolean; showTitle?: boolean }) => {
     const imagePath = imagePaths[props.category as CategoryEnum][props.name];
 
     return (
@@ -41,4 +41,4 @@ const Tool = (props: { category: CategoryEnum; name: string; isLarge?: boolean; 
     );
 };
 
-export default Tool;
+export default Category;

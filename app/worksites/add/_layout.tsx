@@ -7,26 +7,31 @@ import { Input, InputField } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { getAllDocuments } from "@/config/firebaseConfig";
 import { VehicleStatus } from "@/types/components";
-import { CollectionName, Team, Vehicle, Worksite } from "@/types/database";
-import { useEffect, useState } from "react";
+import { CollectionName, Team, Tool, Vehicle, Worksite, WorksiteStatus } from "@/types/database";
+import React, { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 
 const Layout = () => {
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+    const [tools, setTools] = useState<Tool[]>([]);
+
     const [teams, setTeams] = useState<Team[]>([]);
     const [worksites, setWorksites] = useState<Worksite[]>([]);
 
     const [formValues, setFormValues] = useState<{ [key: string]: any }>({});
     const [filteredVehicles, setFilteredVehicles] = useState<(Vehicle & { isAvailable: boolean | null })[]>([]);
     const [teamOptions, setTeamOptions] = useState<CustomFormOption[]>([]);
+    const [selectedVehicles, setSelectedVehicles] = useState<string[]>([]);
+    const [selectedTools, setSelectedTools] = useState<string[]>([]);
     const [imageURL, setImageURL] = useState<string>("");
 
     // Fetch initial data
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [fetchedVehicles, fetchedTeams, fetchedWorksites] = await Promise.all([getAllDocuments<Vehicle>(CollectionName.VEHICLE), getAllDocuments<Team>(CollectionName.TEAM), getAllDocuments<Worksite>(CollectionName.WORKSITE)]);
+                const [fetchedVehicles, fetchedTools, fetchedTeams, fetchedWorksites] = await Promise.all([getAllDocuments<Vehicle>(CollectionName.VEHICLE), getAllDocuments<Tool>(CollectionName.TOOL), getAllDocuments<Team>(CollectionName.TEAM), getAllDocuments<Worksite>(CollectionName.WORKSITE)]);
                 setVehicles(fetchedVehicles);
+                setTools(fetchedTools);
                 setTeams(fetchedTeams);
                 setWorksites(fetchedWorksites);
             } catch (error) {
@@ -40,45 +45,34 @@ const Layout = () => {
     useEffect(() => {
         const { start_date, duration, team } = formValues;
     
-        // Si la date de début ou la durée n'est pas renseignée, affiche tous les véhicules avec statut "gris"
         if (!start_date || !duration) {
             const updatedVehicles = vehicles.map((vehicle) => ({
                 ...vehicle,
                 isAvailable: null, // Gris, en attente de la date
             }));
             setFilteredVehicles(updatedVehicles);
-            return; // Pas besoin de filtrer plus loin
+            setSelectedVehicles([]); // Réinitialiser la sélection des véhicules
+            return;
         }
     
-        // Sinon, continue avec la logique de filtrage comme avant
         const startDate = new Date(start_date);
         const endDate = new Date(startDate);
         endDate.setDate(startDate.getDate() + parseInt(duration, 10));
     
-        // Filtrer les véhicules
         const updatedVehicles = vehicles.map((vehicle) => {
-            const isAvailable =
-                vehicle.status === VehicleStatus.AVAILABLE &&
-                (!vehicle.period.start ||
-                    !vehicle.period.end ||
-                    new Date(vehicle.period.end) < startDate ||
-                    new Date(vehicle.period.start) > endDate);
+            const isAvailable = vehicle.status === VehicleStatus.AVAILABLE && (!vehicle.period.start || !vehicle.period.end || new Date(vehicle.period.end) < startDate || new Date(vehicle.period.start) > endDate);
             return { ...vehicle, isAvailable };
         });
-        setFilteredVehicles(updatedVehicles);
     
-        // Générer les options des équipes
+        setFilteredVehicles(updatedVehicles);
+        setSelectedVehicles([]); // Réinitialiser la sélection des véhicules
+    
         const updatedTeamOptions = teams.map((teamItem) => {
             const isAvailable = worksites.every((worksite) => {
                 const worksiteStart = new Date(worksite.startDate);
                 const worksiteEnd = new Date(worksiteStart);
                 worksiteEnd.setDate(worksiteStart.getDate() + worksite.duration);
-    
-                return (
-                    worksite.team !== teamItem.id ||
-                    worksiteEnd < startDate ||
-                    worksiteStart > endDate
-                );
+                return worksite.team !== teamItem.id || worksiteEnd < startDate || worksiteStart > endDate;
             });
             return {
                 label: `${teamItem.name}${!isAvailable ? " (Indisponible)" : ""}`,
@@ -88,12 +82,12 @@ const Layout = () => {
         });
         setTeamOptions(updatedTeamOptions);
     
-        // Déselectionner l'équipe si elle devient indisponible
+        // Si l'équipe sélectionnée devient indisponible, réinitialiser la sélection
         const selectedTeam = updatedTeamOptions.find((option) => option.value === team);
         if (selectedTeam && selectedTeam.disabled) {
             setFormValues((prevValues) => ({
                 ...prevValues,
-                team: null, // Réinitialise la sélection
+                team: null, // Réinitialise l'équipe sélectionnée
             }));
         }
     }, [formValues, vehicles, teams, worksites]);
@@ -119,6 +113,53 @@ const Layout = () => {
             options: teamOptions,
         },
     ];
+
+    // Fonction de sélection des véhicules
+    const toggleVehicleSelection = (vehicleId: string) => {
+        setSelectedVehicles((prevSelected) => (prevSelected.includes(vehicleId) ? prevSelected.filter((id) => id !== vehicleId) : [...prevSelected, vehicleId]));
+    };
+
+    // Fonction de sélection des outils
+    const toggleToolSelection = (toolId: string) => {
+        setSelectedTools((prevSelectedTools) => (prevSelectedTools.includes(toolId) ? prevSelectedTools.filter((t) => t !== toolId) : [...prevSelectedTools, toolId]));
+    };
+
+    const handleFormSubmission = () => {
+        // Récupérer les véhicules et outils sélectionnés
+        const selectedVehiclesIds = filteredVehicles.filter((vehicle) => selectedVehicles.includes(vehicle.id.toString())).map((vehicle) => vehicle.id);
+
+        const selectedToolsIds = tools.filter((tool) => selectedTools.includes(tool.id.toString())).map((tool) => tool.id);
+
+        // Créer l'objet de type Worksite
+        const newWorksite: Worksite = {
+            id: 1, // Remplacez par un ID dynamique ou générez-le
+            title: formValues.title,
+            description: formValues.description,
+            status: WorksiteStatus.IN_PROGRESS, // Remplacez par une valeur appropriée
+            startDate: new Date(formValues.start_date),
+            duration: parseInt(formValues.duration, 10),
+            location: formValues.location,
+            client: {
+                name: formValues.client,
+                phone: formValues.phone,
+            },
+            vehicles: selectedVehiclesIds,
+            materials: selectedToolsIds,
+            team: parseInt(formValues.team, 10),
+            defects: [],
+            pictures: {
+                card: {
+                    id: 1, // Remplacez par un ID dynamique
+                    type: "url",
+                    value: imageURL,
+                },
+                gallery: [],
+            },
+        };
+
+        // Log l'objet Worksite dans la console
+        console.log("Worksite Object:", newWorksite);
+    };
 
     return (
         <ScrollView className="p-6 bg-white">
@@ -157,16 +198,15 @@ const Layout = () => {
                         <Text>En utilisation</Text>
                     </View>
                 </View>
-
-                <VehicleSelector vehicles={filteredVehicles} />
+                <VehicleSelector vehicles={filteredVehicles} selectedVehicles={selectedVehicles} toggleVehicleSelection={toggleVehicleSelection} />
             </View>
 
             <View className="flex flex-col mt-10 gap-y-3">
                 <Text className="text-gray-500">Outils</Text>
-                <ToolSelector />
+                <ToolSelector tools={tools} selectedTools={selectedTools} toggleToolSelection={toggleToolSelection} />
             </View>
 
-            <Button className="w-full mt-10" size="md">
+            <Button className="w-full mt-10" size="md" onPress={() => handleFormSubmission()}>
                 <ButtonText>Démarrer un nouveau chantier</ButtonText>
             </Button>
         </ScrollView>

@@ -2,7 +2,7 @@ import { CategoryEnum } from "@/types/components";
 import { Tool, Vehicle } from "@/types/database";
 import React from "react";
 import { View } from "react-native";
-import ToolComponent from "./tool";
+import ToolComponent from "./category";
 
 const CategoryList = (props: { category: CategoryEnum; items: Tool[] | Vehicle[] }) => {
     const renderTool = (tool: Tool) => (
