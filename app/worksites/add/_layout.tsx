@@ -134,7 +134,7 @@ const Layout = () => {
             title: formValues.title,
             description: formValues.description,
             status: WorksiteStatus.NOT_STARTED,
-            startDate: new Date(formValues.start_date),
+            startDate: formValues.start_date,
             duration: parseInt(formValues.duration, 10),
             location: formValues.location,
             client: {
