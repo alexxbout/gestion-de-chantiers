@@ -40,49 +40,61 @@ const Layout = () => {
     useEffect(() => {
         const { start_date, duration, team } = formValues;
     
-        if (start_date && duration) {
-            const startDate = new Date(start_date);
-            const endDate = new Date(startDate);
-            endDate.setDate(startDate.getDate() + parseInt(duration, 10));
-    
-            // Filtrer les véhicules
-            const updatedVehicles = vehicles.map((vehicle) => {
-                const isAvailable = 
-                    vehicle.status === VehicleStatus.AVAILABLE &&
-                    (!vehicle.period.start || !vehicle.period.end || new Date(vehicle.period.end) < startDate || new Date(vehicle.period.start) > endDate);
-                return { ...vehicle, isAvailable };
-            });
+        // Si la date de début ou la durée n'est pas renseignée, affiche tous les véhicules avec statut "gris"
+        if (!start_date || !duration) {
+            const updatedVehicles = vehicles.map((vehicle) => ({
+                ...vehicle,
+                isAvailable: null, // Gris, en attente de la date
+            }));
             setFilteredVehicles(updatedVehicles);
+            return; // Pas besoin de filtrer plus loin
+        }
     
-            // Générer les options des équipes
-            const updatedTeamOptions = teams.map((teamItem) => {
-                const isAvailable = worksites.every((worksite) => {
-                    const worksiteStart = new Date(worksite.startDate);
-                    const worksiteEnd = new Date(worksiteStart);
-                    worksiteEnd.setDate(worksiteStart.getDate() + worksite.duration);
+        // Sinon, continue avec la logique de filtrage comme avant
+        const startDate = new Date(start_date);
+        const endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + parseInt(duration, 10));
     
-                    return (
-                        worksite.team !== teamItem.id ||
-                        worksiteEnd < startDate ||
-                        worksiteStart > endDate
-                    );
-                });
-                return {
-                    label: `${teamItem.name}${!isAvailable ? " (Indisponible)" : ""}`,
-                    value: teamItem.id.toString(),
-                    disabled: !isAvailable,
-                };
+        // Filtrer les véhicules
+        const updatedVehicles = vehicles.map((vehicle) => {
+            const isAvailable =
+                vehicle.status === VehicleStatus.AVAILABLE &&
+                (!vehicle.period.start ||
+                    !vehicle.period.end ||
+                    new Date(vehicle.period.end) < startDate ||
+                    new Date(vehicle.period.start) > endDate);
+            return { ...vehicle, isAvailable };
+        });
+        setFilteredVehicles(updatedVehicles);
+    
+        // Générer les options des équipes
+        const updatedTeamOptions = teams.map((teamItem) => {
+            const isAvailable = worksites.every((worksite) => {
+                const worksiteStart = new Date(worksite.startDate);
+                const worksiteEnd = new Date(worksiteStart);
+                worksiteEnd.setDate(worksiteStart.getDate() + worksite.duration);
+    
+                return (
+                    worksite.team !== teamItem.id ||
+                    worksiteEnd < startDate ||
+                    worksiteStart > endDate
+                );
             });
-            setTeamOptions(updatedTeamOptions);
+            return {
+                label: `${teamItem.name}${!isAvailable ? " (Indisponible)" : ""}`,
+                value: teamItem.id.toString(),
+                disabled: !isAvailable,
+            };
+        });
+        setTeamOptions(updatedTeamOptions);
     
-            // Déselectionner l'équipe si elle devient indisponible
-            const selectedTeam = updatedTeamOptions.find((option) => option.value === team);
-            if (selectedTeam && selectedTeam.disabled) {
-                setFormValues((prevValues) => ({
-                    ...prevValues,
-                    team: null, // Réinitialise la sélection
-                }));
-            }
+        // Déselectionner l'équipe si elle devient indisponible
+        const selectedTeam = updatedTeamOptions.find((option) => option.value === team);
+        if (selectedTeam && selectedTeam.disabled) {
+            setFormValues((prevValues) => ({
+                ...prevValues,
+                team: null, // Réinitialise la sélection
+            }));
         }
     }, [formValues, vehicles, teams, worksites]);
 
