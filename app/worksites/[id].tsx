@@ -1,5 +1,6 @@
 import CategoryList from "@/components/custom/category-list";
 import DefectCard from "@/components/custom/defect";
+import MapTilerMap from "@/components/custom/map";
 import TeamCard from "@/components/custom/team";
 import WorksiteStatusBadge from "@/components/custom/worksite-status-badge";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
@@ -210,6 +211,9 @@ const Layout = () => {
                         <View className="flex gap-y-5">
                             <Text className="text-2xl text-black">Localisation</Text>
                             <Text className="text-lg font-light">{worksite.location}</Text>
+                            <View className="overflow-hidden rounded-md">
+                                <MapTilerMap address={worksite.location} />
+                            </View>
                         </View>
 
                         <View className="flex gap-y-5">
