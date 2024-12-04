@@ -5,6 +5,7 @@ import WorksiteStatusBadge from "@/components/custom/worksite-status-badge";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { AlertCircleIcon } from "@/components/ui/icon";
 import { Image } from "@/components/ui/image";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Text } from "@/components/ui/text/index.web";
 import { formatDate } from "@/components/utils";
 import { findDocumentById } from "@/config/firebaseConfig";
@@ -28,6 +29,8 @@ const Layout = () => {
     const [teamLead, setTeamLead] = useState<User | null>(null);
     const [teamWorkers, setTeamWorkers] = useState<User[]>([]);
 
+    const [isLoading, setIsLoading] = useState(true);
+
     const addDaysToDate = (date: Date, days: number) => {
         const newDate = new Date(date);
         newDate.setDate(newDate.getDate() + days);
@@ -35,109 +38,64 @@ const Layout = () => {
     };
 
     useEffect(() => {
-        const fetchWorksite = async () => {
+        const fetchWorksiteData = async () => {
             try {
+                setIsLoading(true);
                 const fetchedWorksite = await findDocumentById(Number.parseInt(id as string), CollectionName.WORKSITE);
                 setWorksite(fetchedWorksite as Worksite);
+
+                if (fetchedWorksite?.materials) {
+                    const rawTools = await Promise.all(fetchedWorksite.materials.map((toolId: number) => findDocumentById(toolId, CollectionName.TOOL)));
+                    setTools(rawTools as Tool[]);
+                }
+
+                if (fetchedWorksite?.vehicles) {
+                    const rawVehicles = await Promise.all(fetchedWorksite.vehicles.map((vehicleId: number) => findDocumentById(vehicleId, CollectionName.VEHICLE)));
+                    setVehicles(rawVehicles as Vehicle[]);
+                }
+
+                if (fetchedWorksite?.team) {
+                    const fetchedTeam = await findDocumentById(fetchedWorksite.team, CollectionName.TEAM);
+                    setTeam(fetchedTeam as Team);
+
+                    if (fetchedTeam?.members.lead) {
+                        const fetchedTeamLead = await findDocumentById(fetchedTeam.members.lead, CollectionName.USER);
+                        setTeamLead(fetchedTeamLead as User);
+                    }
+
+                    if (fetchedTeam?.members.workers) {
+                        const rawTeamWorkers = await Promise.all(fetchedTeam.members.workers.map((workerId: number) => findDocumentById(workerId, CollectionName.USER)));
+                        setTeamWorkers(rawTeamWorkers as User[]);
+                    }
+                }
             } catch (error) {
-                console.error("Error fetching worksite: ", error);
+                console.error("Error fetching data: ", error);
+            } finally {
+                setIsLoading(false);
             }
         };
 
-        if (id) {
-            fetchWorksite();
-        }
+        if (id) fetchWorksiteData();
     }, [id]);
 
-    useEffect(() => {
-        const fetchTools = async () => {
-            if (!worksite) return;
-
-            try {
-                const rawTools = await Promise.all(worksite.materials.map((toolId) => findDocumentById(toolId, CollectionName.TOOL)));
-
-                setTools(rawTools as Tool[]);
-            } catch (error) {
-                console.error("Error fetching tools: ", error);
-            }
-        };
-
-        if (worksite?.materials) {
-            fetchTools();
-        }
-
-        const fetchVehicle = async () => {
-            if (!worksite) return;
-
-            try {
-                const rawVehicles = await Promise.all(worksite.vehicles.map((vehicleId) => findDocumentById(vehicleId, CollectionName.VEHICLE)));
-
-                setVehicles(rawVehicles as Vehicle[]);
-            } catch (error) {
-                console.error("Error fetching vehicles: ", error);
-            }
-        };
-
-        if (worksite?.vehicles) {
-            fetchVehicle();
-        }
-
-        const fetchTeam = async () => {
-            if (!worksite) return;
-
-            try {
-                const fetchedTeam = await findDocumentById(worksite.team, CollectionName.TEAM);
-                setTeam(fetchedTeam as Team);
-            } catch (error) {
-                console.error("Error fetching team: ", error);
-            }
-        };
-
-        if (worksite?.team) {
-            fetchTeam();
-        }
-    }, [worksite]);
-
-    useEffect(() => {
-        const fetchTeamLead = async () => {
-            if (!team) return;
-
-            try {
-                const fetchedTeamLead = await findDocumentById(team.members.lead, CollectionName.USER);
-                setTeamLead(fetchedTeamLead as User);
-            } catch (error) {
-                console.error("Error fetching team lead: ", error);
-            }
-        };
-
-        if (team?.members.lead) {
-            fetchTeamLead();
-        }
-
-        const fetchTeamWorkers = async () => {
-            if (!team) return;
-
-            try {
-                const rawTeamWorkers = await Promise.all(team.members.workers.map((workerId) => findDocumentById(workerId, CollectionName.USER)));
-
-                setTeamWorkers(rawTeamWorkers as User[]);
-            } catch (error) {
-                console.error("Error fetching team workers: ", error);
-            }
-        };
-
-        if (team?.members.workers) {
-            fetchTeamWorkers();
-        }
-    }, [team]);
-
-    if (!worksite) {
+    if (isLoading) {
         return (
-            <View className="flex items-center justify-center h-full">
-                <Text className="text-2xl text-black">Chargement...</Text>
-            </View>
+            <ScrollView className="p-5 bg-white">
+                <Skeleton className="w-full mb-5 h-80" />
+                <Skeleton className="w-1/2 h-10 mb-5" />
+                <Skeleton className="w-1/3 h-8 mb-10" />
+                <Skeleton className="h-20 mb-5" />
+                <Skeleton className="h-20 mb-5" />
+                <Skeleton className="h-20 mb-5" />
+                <Skeleton className="h-20 mb-5" />
+                <Skeleton className="h-20 mb-5" />
+                <Skeleton className="h-20 mb-5" />
+                <Skeleton className="w-full h-40" />
+            </ScrollView>
         );
     }
+
+    if (!worksite) return null;
 
     return (
         <>
