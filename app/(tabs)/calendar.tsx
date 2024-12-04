@@ -1,4 +1,5 @@
 import WorksiteCardSmall from "@/components/custom/worksite-card-small";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Text } from "@/components/ui/text";
 import { View } from "@/components/ui/view";
 import { getAllDocuments } from "@/config/firebaseConfig";
@@ -23,22 +24,21 @@ const Tab = () => {
     const [worksites, setWorksites] = useState<Worksite[]>([]);
     const [worksiteColors, setWorksiteColors] = useState<{ [id: number]: string }>({});
     const [markedDates, setMarkedDates] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
 
     const fetchWorksites = async () => {
         try {
+            setIsLoading(true);
             const fetchedWorksites = await getAllDocuments<Worksite[]>(CollectionName.WORKSITE);
 
-            // Générer des couleurs distinctes
             const colorsArray = generateDistinctColors(fetchedWorksites.flat().length);
             const colors: { [id: number]: string } = {};
 
-            // Générer les périodes marquées
             const dates: { [key: string]: { periods: { startingDay: boolean; endingDay: boolean; color: string }[] } } = {};
             fetchedWorksites.flat().forEach((worksite, index) => {
                 const worksiteColor = colorsArray[index];
                 colors[worksite.id] = worksiteColor;
 
-                // Calcul des périodes
                 const startDate = new Date(worksite.startDate);
                 for (let i = 0; i <= worksite.duration; i++) {
                     const currentDate = new Date(startDate);
@@ -63,16 +63,18 @@ const Tab = () => {
             setWorksiteColors(colors);
         } catch (error) {
             console.error("Error fetching worksites: ", error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const generateDistinctColors = (numColors: number): string[] => {
         const colors = [];
-        const step = 360 / numColors; // Division équidistante sur le cercle chromatique
+        const step = 360 / numColors;
 
         for (let i = 0; i < numColors; i++) {
-            const hue = i * step; // Calcul de la teinte
-            colors.push(`hsl(${hue}, 80%, 50%)`); // Saturation élevée, luminosité modérée
+            const hue = i * step;
+            colors.push(`hsl(${hue}, 80%, 50%)`);
         }
 
         return colors;
@@ -86,30 +88,46 @@ const Tab = () => {
 
     return (
         <ScrollView className="flex flex-col h-full p-5 pb-20 bg-white">
-            <Calendar
-                firstDay={1}
-                enableSwipeMonths={true}
-                onDayPress={(day: any) => {
-                    setSelected(day.dateString);
-                }}
-                markingType="multi-period"
-                markedDates={{
-                    ...markedDates,
-                    [selected]: {
-                        selected: true,
-                        disableTouchEvent: true,
-                        selectedDotColor: "orange",
-                    },
-                }}
-            />
+            {isLoading ? (
+                <View className="flex flex-col gap-y-5">
+                    <Skeleton className="w-full mb-5 h-80" />
+                    <Skeleton className="w-2/3 h-8 mb-5" />
+                    {Array.from({ length: 3 }).map((_, index) => (
+                        <View key={index} className="p-4 rounded-md bg-background-100">
+                            <Skeleton className="w-1/2 h-6 mb-2" />
+                            <Skeleton className="w-1/3 h-5 mb-2" />
+                            <Skeleton className="w-2/3 h-5 mb-2" />
+                        </View>
+                    ))}
+                </View>
+            ) : (
+                <>
+                    <Calendar
+                        firstDay={1}
+                        enableSwipeMonths={true}
+                        onDayPress={(day: any) => {
+                            setSelected(day.dateString);
+                        }}
+                        markingType="multi-period"
+                        markedDates={{
+                            ...markedDates,
+                            [selected]: {
+                                selected: true,
+                                disableTouchEvent: true,
+                                selectedDotColor: "orange",
+                            },
+                        }}
+                    />
 
-            <View className="flex flex-col gap-y-5">
-                <Text className="pt-10 text-2xl font-medium text-black">{(worksites.length > 0 ? worksites.length : "Aucun") + " chantier" + (worksites.length > 0 ? "s" : "") + " ce jour"}</Text>
+                    <View className="flex flex-col gap-y-5">
+                        <Text className="pt-10 text-2xl font-medium text-black">{(worksites.length > 0 ? worksites.length : "Aucun") + " chantier" + (worksites.length > 0 ? "s" : "") + " ce jour"}</Text>
 
-                {worksites.map((worksite) => (
-                    <WorksiteCardSmall key={worksite.id} worksite={worksite} color={worksiteColors[worksite.id]} />
-                ))}
-            </View>
+                        {worksites.map((worksite) => (
+                            <WorksiteCardSmall key={worksite.id} worksite={worksite} color={worksiteColors[worksite.id]} />
+                        ))}
+                    </View>
+                </>
+            )}
         </ScrollView>
     );
 };

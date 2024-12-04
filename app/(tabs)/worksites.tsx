@@ -1,5 +1,6 @@
 import WorksiteCard from "@/components/custom/worksite-card";
 import { Button, ButtonText } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { getAllDocuments } from "@/config/firebaseConfig";
 import { CollectionName, Worksite, WorksiteStatus } from "@/types/database";
 import SegmentedControl, { NativeSegmentedControlIOSChangeEvent } from "@react-native-segmented-control/segmented-control";
@@ -10,6 +11,7 @@ import { NativeSyntheticEvent, ScrollView, View } from "react-native";
 const Tab = () => {
     const router = useRouter();
     const [worksites, setWorksites] = useState<Worksite[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [segmentedValues, setSegmentedValues] = useState(["Tous", "Non Réal.", "En cours", "Terminés", "Interr."]);
@@ -29,11 +31,13 @@ const Tab = () => {
 
     const fetchWorksites = async () => {
         try {
+            setIsLoading(true);
             const fetchedWorksites = await getAllDocuments<Worksite[]>(CollectionName.WORKSITE);
             setWorksites(fetchedWorksites.flat());
-            console.log("Worksites fetched: ", fetchedWorksites);
         } catch (error) {
             console.error("Error fetching worksites: ", error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -52,9 +56,15 @@ const Tab = () => {
                     <ButtonText>Démarrer un nouveau chantier</ButtonText>
                 </Button>
 
-                {filteredWorksites.map((worksite, index) => (
-                    <WorksiteCard key={index} worksite={worksite} />
-                ))}
+                {isLoading
+                    ? Array.from({ length: 3 }).map((_, index) => (
+                          <View key={index} className="w-full p-4 rounded-md bg-background-100">
+                              <Skeleton className="mb-4 rounded-sm h-44" />
+                              <Skeleton className="h-6 mb-2" />
+                              <Skeleton className="w-2/3 h-4" />
+                          </View>
+                      ))
+                    : filteredWorksites.map((worksite, index) => <WorksiteCard key={index} worksite={worksite} />)}
             </View>
         </ScrollView>
     );
