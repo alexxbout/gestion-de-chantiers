@@ -2,7 +2,7 @@ import WorksiteCardSmall from "@/components/custom/worksite-card-small";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Text } from "@/components/ui/text";
 import { View } from "@/components/ui/view";
-import { getAllDocuments } from "@/config/firebaseConfig";
+import { getAllDocuments } from "@/firebase/api";
 import { CollectionName, Worksite } from "@/types/database";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";

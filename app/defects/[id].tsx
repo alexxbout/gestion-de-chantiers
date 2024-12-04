@@ -1,6 +1,6 @@
 import DefectCard from "@/components/custom/defect";
 import { Button, ButtonText } from "@/components/ui/button";
-import { findDocumentById } from "@/config/firebaseConfig";
+import { findDocumentById } from "@/firebase/api";
 import { CollectionName, Worksite } from "@/types/database";
 import { BlurView } from "expo-blur";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";

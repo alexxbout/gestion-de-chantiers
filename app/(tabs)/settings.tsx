@@ -1,5 +1,6 @@
 import { Button, ButtonText } from "@/components/ui/button";
-import { clearData, uploadDataToFirestore } from "@/config/firebaseConfig";
+import { useUser } from "@/context/UserContext";
+import { clearData, uploadDataToFirestore } from "@/firebase/api";
 import teamSample from "@/samples/team-sample.json";
 import toolSample from "@/samples/tool-sample.json";
 import userSample from "@/samples/user-sample.json";
@@ -9,6 +10,8 @@ import { CollectionName } from "@/types/database";
 import { View } from "react-native";
 
 const Tab = () => {
+    const {user, logout} = useUser();
+
     const add = (type: CollectionName) => {
         console.log("Ajout de ressource de type", type);
 
@@ -53,31 +56,35 @@ const Tab = () => {
 
     return (
         <View className="flex flex-col h-full p-5 bg-white gap-y-5">
-            <Button onPress={() => clear()} action="negative">
-                <ButtonText>Effacer toutes les données</ButtonText>
+            <Button onPress={() => logout()} action="negative">
+                <ButtonText>Déconnexion</ButtonText>
+            </Button>
+
+            <Button onPress={() => clear()} action="negative" className="mt-10">
+                <ButtonText>Effacer toutes les ressources</ButtonText>
             </Button>
 
             <Button onPress={() => addAll()} action="positive">
                 <ButtonText>Ajouter toutes les ressources</ButtonText>
             </Button>
 
-            <Button onPress={() => add(CollectionName.VEHICLE)}>
+            <Button onPress={() => add(CollectionName.VEHICLE)} action="positive" className="mt-10">
                 <ButtonText>Ajouter des véhicules</ButtonText>
             </Button>
 
-            <Button onPress={() => add(CollectionName.TOOL)}>
+            <Button onPress={() => add(CollectionName.TOOL)} action="positive">
                 <ButtonText>Ajouter des outils</ButtonText>
             </Button>
 
-            <Button onPress={() => add(CollectionName.WORKSITE)}>
+            <Button onPress={() => add(CollectionName.WORKSITE)} action="positive">
                 <ButtonText>Ajouter des chantiers</ButtonText>
             </Button>
 
-            <Button onPress={() => add(CollectionName.USER)}>
+            <Button onPress={() => add(CollectionName.USER)} action="positive">
                 <ButtonText>Ajouter des utilisateurs</ButtonText>
             </Button>
 
-            <Button onPress={() => add(CollectionName.TEAM)}>
+            <Button onPress={() => add(CollectionName.TEAM)} action="positive">
                 <ButtonText>Ajouter des équipes</ButtonText>
             </Button>
         </View>

@@ -1,14 +1,17 @@
 import WorksiteCard from "@/components/custom/worksite-card";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getAllDocuments } from "@/config/firebaseConfig";
-import { CollectionName, Worksite, WorksiteStatus } from "@/types/database";
+import { useUser } from "@/context/UserContext";
+import { getAllDocuments } from "@/firebase/api";
+import { CollectionName, Team, Worksite, WorksiteStatus } from "@/types/database";
 import SegmentedControl, { NativeSegmentedControlIOSChangeEvent } from "@react-native-segmented-control/segmented-control";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { NativeSyntheticEvent, ScrollView, View } from "react-native";
 
 const Tab = () => {
+    const { user } = useUser();
+
     const router = useRouter();
     const [worksites, setWorksites] = useState<Worksite[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -32,8 +35,38 @@ const Tab = () => {
     const fetchWorksites = async () => {
         try {
             setIsLoading(true);
-            const fetchedWorksites = await getAllDocuments<Worksite[]>(CollectionName.WORKSITE);
-            setWorksites(fetchedWorksites.flat());
+            const fetchedWorksites = await getAllDocuments<Worksite>(CollectionName.WORKSITE);
+    
+            if (!user) {
+                setWorksites([]);
+                return;
+            }
+    
+            // Filtrer selon le rôle de l'utilisateur
+            let filteredWorksites: Worksite[] = [];
+            if (user.role === "Responsable") {
+                // Responsable : Accès à tous les chantiers
+                filteredWorksites = fetchedWorksites;
+            } else {
+                // Récupérer les équipes pour filtrage
+                const allTeams = await getAllDocuments<Team[]>(CollectionName.TEAM);
+    
+                // Trouver les équipes associées à l'utilisateur
+                const userTeams = allTeams.flat().filter((team) => {
+                    if (user.role === "Chef de chantier") {
+                        return team.members.lead === user.id;
+                    } else if (user.role === "Equipier") {
+                        return team.members.workers.includes(user.id);
+                    }
+                    return false;
+                });
+    
+                // Filtrer les chantiers liés aux équipes de l'utilisateur
+                const teamIds = userTeams.map((team) => team.id);
+                filteredWorksites = fetchedWorksites.filter((worksite) => teamIds.includes(worksite.team));
+            }
+    
+            setWorksites(filteredWorksites);
         } catch (error) {
             console.error("Error fetching worksites: ", error);
         } finally {

@@ -1,6 +1,7 @@
 import { Box } from "@/components/ui/box";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
-import { FIREBASE_AUTH } from "@/config/firebaseConfig";
+import { UserProvider } from "@/context/UserContext";
+import { FIREBASE_AUTH } from "@/firebase/api";
 import "@/global.css";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { onAuthStateChanged, User } from "firebase/auth";
@@ -42,7 +43,9 @@ const Layout = () => {
 
     return (
         <GluestackUIProvider>
-            <Stack screenOptions={{ headerShown: false }} />
+            <UserProvider>
+                <Stack screenOptions={{ headerShown: false }} />
+            </UserProvider>
         </GluestackUIProvider>
     );
 };

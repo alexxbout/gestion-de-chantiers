@@ -47,6 +47,7 @@
     "@gluestack-ui/toast": "^1.0.8",
     "@gluestack-ui/tooltip": "^0.1.35",
     "@legendapp/motion": "^2.4.0",
+    "@react-native-async-storage/async-storage": "^2.1.0",
     "@react-native-community/cli": "^15.1.2",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-firebase/app": "^21.5.0",

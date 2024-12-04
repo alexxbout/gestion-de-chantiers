@@ -5,7 +5,7 @@ import { AddIcon, CloseCircleIcon, Icon, SlashIcon } from "@/components/ui/icon"
 import { Image } from "@/components/ui/image";
 import { Input, InputField } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
-import { getAllDocuments, uploadDataToFirestore } from "@/config/firebaseConfig";
+import { getAllDocuments, uploadDataToFirestore } from "@/firebase/api";
 import { VehicleStatus } from "@/types/components";
 import { CollectionName, Team, Tool, Vehicle, Worksite, WorksiteStatus } from "@/types/database";
 import { useRouter } from "expo-router";

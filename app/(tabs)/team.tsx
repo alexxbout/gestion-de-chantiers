@@ -1,6 +1,6 @@
 import TeamCard from "@/components/custom/team";
 import { Skeleton } from "@/components/ui/skeleton";
-import { findDocumentById, getAllDocuments } from "@/config/firebaseConfig";
+import { findDocumentById, getAllDocuments } from "@/firebase/api";
 import { CollectionName, Team, User } from "@/types/database";
 import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";

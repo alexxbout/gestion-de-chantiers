@@ -1,23 +1,35 @@
-// src/firebaseConfig.ts
 import { CollectionName } from "@/types/database";
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { addDoc, collection, deleteDoc, getDocs, getFirestore, query, where } from "firebase/firestore";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyAl-agz25C0zyynOANVQs8mPzegv9T0S6A",
-    authDomain: "gestion-de-chantiers-34eed.firebaseapp.com",
-    projectId: "gestion-de-chantiers-34eed",
-    storageBucket: "gestion-de-chantiers-34eed.firebasestorage.app",
-    messagingSenderId: "528326924813",
-    appId: "1:528326924813:web:d528941abe696ef2bf9344",
-};
+import { firebaseConfig } from "./config";
 
 const app = initializeApp(firebaseConfig);
 
 export const FIREBASE_AUTH = getAuth(app);
 export const db = getFirestore(app);
 
+/**
+ * Crée un compte utilisateur avec email et mot de passe.
+ * @param email - L'adresse email de l'utilisateur.
+ * @param password - Le mot de passe de l'utilisateur.
+ * @returns L'utilisateur créé.
+ */
+export const createUserAccount = async (email: string, password: string) => {
+    try {
+        const userCredential = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
+        return userCredential.user;
+    } catch (error) {
+        console.error("Erreur lors de la création de l'utilisateur : ", error);
+        throw error; // Relancer l'erreur pour gestion dans l'interface utilisateur
+    }
+};
+
+/**
+ * Envoie des données à Firestore.
+ * @param file - Les données à envoyer.
+ * @param collectionName - Le nom de la collection Firestore.
+ */
 export const uploadDataToFirestore = async (file: any, collectionName: CollectionName): Promise<void> => {
     const collectionRef = collection(db, collectionName);
 
@@ -31,9 +43,16 @@ export const uploadDataToFirestore = async (file: any, collectionName: Collectio
     }
 };
 
-export const findDocumentById = async (id: number, collectionName: CollectionName) => {
+/**
+ * Recherche un document par champ.
+ * @param field - Le champ à rechercher.
+ * @param value - La valeur du champ.
+ * @param collectionName - Le nom de la collection Firestore.
+ * @returns Le document trouvé ou null.
+ */
+export const findDocumentByField = async <T>(field: string, value: any, collectionName: CollectionName): Promise<T | null> => {
     const collectionRef = collection(db, collectionName);
-    const q = query(collectionRef, where("id", "==", id));
+    const q = query(collectionRef, where(field, "==", value));
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.empty) {
@@ -41,13 +60,30 @@ export const findDocumentById = async (id: number, collectionName: CollectionNam
         return null;
     }
 
-    const document = querySnapshot.docs[0].data();
+    let document: any = null;
 
-    console.log("Document data:", document);
+    querySnapshot.forEach((doc) => {
+        document = doc.data();
+    });
 
     return document;
 };
 
+/**
+ * Recherche un document par identifiant.
+ * @param id - L'identifiant du document.
+ * @param collectionName - Le nom de la collection Firestore.
+ * @returns Le document trouvé ou null.
+ */
+export const findDocumentById = async <T>(id: number, collectionName: CollectionName): Promise<T | null> => {
+    return findDocumentByField("id", id, collectionName);
+};
+
+/**
+ * Récupère tous les documents d'une collection.
+ * @param collectionName - Le nom de la collection Firestore.
+ * @returns Les documents trouvés.
+ */
 export const getAllDocuments = async <T>(collectionName: CollectionName): Promise<T[]> => {
     const collectionRef = collection(db, collectionName);
     const querySnapshot = await getDocs(collectionRef);
@@ -60,6 +96,10 @@ export const getAllDocuments = async <T>(collectionName: CollectionName): Promis
     return documents;
 };
 
+/**
+ * Efface toutes les données d'une collection.
+ * @param collectionName - Le nom de la collection Firestore.
+ */
 export const clearData = async (collectionName: CollectionName): Promise<void> => {
     const collectionRef = collection(db, collectionName);
     const querySnapshot = await getDocs(collectionRef);
@@ -76,6 +116,12 @@ export const clearData = async (collectionName: CollectionName): Promise<void> =
     console.log("Effacement des données terminé.");
 };
 
+/**
+ * Met à jour un document.
+ * @param id - L'identifiant du document.
+ * @param collectionName - Le nom de la collection Firestore.
+ * @param data - Les données à mettre à jour.
+ */
 export const updateDocument = async (id: number, collectionName: CollectionName, data: any): Promise<void> => {
     const collectionRef = collection(db, collectionName);
     const q = query(collectionRef, where("id", "==", id));
