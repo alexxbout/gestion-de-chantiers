@@ -1,6 +1,7 @@
 import WorksiteCard from "@/components/custom/worksite-card";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Text } from "@/components/ui/text";
 import { useUser } from "@/context/UserContext";
 import { getAllDocuments } from "@/firebase/api";
 import { CollectionName, Team, Worksite, WorksiteStatus } from "@/types/database";
@@ -11,6 +12,8 @@ import { NativeSyntheticEvent, ScrollView, View } from "react-native";
 
 const Tab = () => {
     const { user } = useUser();
+
+    console.log(user);
 
     const router = useRouter();
     const [worksites, setWorksites] = useState<Worksite[]>([]);
@@ -36,22 +39,18 @@ const Tab = () => {
         try {
             setIsLoading(true);
             const fetchedWorksites = await getAllDocuments<Worksite>(CollectionName.WORKSITE);
-    
+
             if (!user) {
                 setWorksites([]);
                 return;
             }
-    
-            // Filtrer selon le rôle de l'utilisateur
+
             let filteredWorksites: Worksite[] = [];
             if (user.role === "Responsable") {
-                // Responsable : Accès à tous les chantiers
                 filteredWorksites = fetchedWorksites;
             } else {
-                // Récupérer les équipes pour filtrage
                 const allTeams = await getAllDocuments<Team[]>(CollectionName.TEAM);
-    
-                // Trouver les équipes associées à l'utilisateur
+
                 const userTeams = allTeams.flat().filter((team) => {
                     if (user.role === "Chef de chantier") {
                         return team.members.lead === user.id;
@@ -60,12 +59,11 @@ const Tab = () => {
                     }
                     return false;
                 });
-    
-                // Filtrer les chantiers liés aux équipes de l'utilisateur
+
                 const teamIds = userTeams.map((team) => team.id);
                 filteredWorksites = fetchedWorksites.filter((worksite) => teamIds.includes(worksite.team));
             }
-    
+
             setWorksites(filteredWorksites);
         } catch (error) {
             console.error("Error fetching worksites: ", error);
@@ -77,7 +75,7 @@ const Tab = () => {
     useFocusEffect(
         useCallback(() => {
             fetchWorksites();
-        }, [])
+        }, [user])
     );
 
     return (
@@ -85,19 +83,25 @@ const Tab = () => {
             <View className="flex flex-col pb-10 bg-white gap-y-8">
                 <SegmentedControl values={segmentedValues} selectedIndex={selectedIndex} onChange={handleIndexChange} appearance="light" />
 
-                <Button onPress={() => router.push({ pathname: "../worksites/add" })} className="w-full" size="md">
-                    <ButtonText>Démarrer un nouveau chantier</ButtonText>
-                </Button>
+                {user?.role == "Responsable" && (
+                    <Button onPress={() => router.push({ pathname: "../worksites/add" })} className="w-full" size="md">
+                        <ButtonText>Démarrer un nouveau chantier</ButtonText>
+                    </Button>
+                )}
 
-                {isLoading
-                    ? Array.from({ length: 3 }).map((_, index) => (
-                          <View key={index} className="w-full p-4 rounded-md bg-background-100">
-                              <Skeleton className="mb-4 rounded-sm h-44" />
-                              <Skeleton className="h-6 mb-2" />
-                              <Skeleton className="w-2/3 h-4" />
-                          </View>
-                      ))
-                    : filteredWorksites.map((worksite, index) => <WorksiteCard key={index} worksite={worksite} />)}
+                {isLoading ? (
+                    Array.from({ length: 3 }).map((_, index) => (
+                        <View key={index} className="w-full p-4 rounded-md bg-background-100">
+                            <Skeleton className="mb-4 rounded-sm h-44" />
+                            <Skeleton className="h-6 mb-2" />
+                            <Skeleton className="w-2/3 h-4" />
+                        </View>
+                    ))
+                ) : filteredWorksites.length > 0 ? (
+                    filteredWorksites.map((worksite, index) => <WorksiteCard key={index} worksite={worksite} />)
+                ) : (
+                    <Text>Aucun chantier à afficher.</Text>
+                )}
             </View>
         </ScrollView>
     );
