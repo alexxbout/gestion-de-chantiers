@@ -11,11 +11,17 @@ import { CollectionName } from "@/types/database";
 import { View } from "react-native";
 
 const Tab = () => {
-    const {user, logout} = useUser();
+    const { user, logout } = useUser();
 
     if (user?.role !== "Responsable") {
         return (
-            <Text className="p-5">Vous n'avez pas les permissions nécessaires pour accéder à cette page.</Text>
+            <View className="flex flex-col h-full p-5 bg-white gap-y-5">
+                <Button onPress={() => logout()} action="negative">
+                    <ButtonText>Déconnexion</ButtonText>
+                </Button>
+
+                <Text>Vous n'avez pas les permissions nécessaires pour accéder à cette page.</Text>
+            </View>
         );
     }
 
@@ -54,7 +60,7 @@ const Tab = () => {
         add(CollectionName.WORKSITE);
         add(CollectionName.USER);
         add(CollectionName.TEAM);
-    }
+    };
 
     const clear = () => {
         console.log("Effacement des ressources");
