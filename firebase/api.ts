@@ -20,8 +20,7 @@ export const createUserAccount = async (email: string, password: string) => {
         const userCredential = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
         return userCredential.user;
     } catch (error) {
-        console.error("Erreur lors de la création de l'utilisateur : ", error);
-        throw error; // Relancer l'erreur pour gestion dans l'interface utilisateur
+        console.log("Erreur lors de la création de l'utilisateur : ", error);
     }
 };
 

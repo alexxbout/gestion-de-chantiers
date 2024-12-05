@@ -1,6 +1,7 @@
 import { Button, ButtonText } from "@/components/ui/button";
+import { Text } from "@/components/ui/text";
 import { useUser } from "@/context/UserContext";
-import { clearData, uploadDataToFirestore } from "@/firebase/api";
+import { clearData, createUserAccount, uploadDataToFirestore } from "@/firebase/api";
 import teamSample from "@/samples/team-sample.json";
 import toolSample from "@/samples/tool-sample.json";
 import userSample from "@/samples/user-sample.json";
@@ -11,6 +12,12 @@ import { View } from "react-native";
 
 const Tab = () => {
     const {user, logout} = useUser();
+
+    if (user?.role !== "Responsable") {
+        return (
+            <Text className="p-5">Vous n'avez pas les permissions nécessaires pour accéder à cette page.</Text>
+        );
+    }
 
     const add = (type: CollectionName) => {
         console.log("Ajout de ressource de type", type);
@@ -27,6 +34,10 @@ const Tab = () => {
                 break;
             case CollectionName.USER:
                 uploadDataToFirestore(userSample, type);
+
+                userSample.forEach(async (user) => {
+                    await createUserAccount(user.email, "password");
+                });
                 break;
             case CollectionName.TEAM:
                 uploadDataToFirestore(teamSample, type);

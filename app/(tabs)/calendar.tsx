@@ -2,6 +2,7 @@ import WorksiteCardSmall from "@/components/custom/worksite-card-small";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Text } from "@/components/ui/text";
 import { View } from "@/components/ui/view";
+import { useUser } from "@/context/UserContext";
 import { getAllDocuments } from "@/firebase/api";
 import { CollectionName, Worksite } from "@/types/database";
 import { useFocusEffect } from "expo-router";
@@ -20,6 +21,14 @@ LocaleConfig.locales["fr"] = {
 LocaleConfig.defaultLocale = "fr";
 
 const Tab = () => {
+    const {user} = useUser();
+
+    if (user?.role !== "Responsable") {
+        return (
+            <Text className="p-5">Vous n'avez pas les permissions nécessaires pour accéder à cette page.</Text>
+        );
+    }
+
     const [selected, setSelected] = useState("");
     const [worksites, setWorksites] = useState<Worksite[]>([]);
     const [worksiteColors, setWorksiteColors] = useState<{ [id: number]: string }>({});
