@@ -1,6 +1,6 @@
 import CustomForm, { CustomFormProps } from "@/components/custom/custom-form";
 import { Button, ButtonText } from "@/components/ui/button";
-import { findDocumentById, updateDocument } from "@/config/firebaseConfig";
+import { findDocumentById, updateDocument } from "@/firebase/api";
 import { CollectionName, Worksite, WorksiteStatus } from "@/types/database";
 import { BlurView } from "expo-blur";
 import { useLocalSearchParams, useRouter } from "expo-router";

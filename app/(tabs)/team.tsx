@@ -1,11 +1,21 @@
 import TeamCard from "@/components/custom/team";
 import { Skeleton } from "@/components/ui/skeleton";
-import { findDocumentById, getAllDocuments } from "@/config/firebaseConfig";
+import { Text } from "@/components/ui/text";
+import { useUser } from "@/context/UserContext";
+import { findDocumentById, getAllDocuments } from "@/firebase/api";
 import { CollectionName, Team, User } from "@/types/database";
 import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 
 const Teams = () => {
+    const { user } = useUser();
+
+    if (user?.role !== "Responsable") {
+        return (
+            <Text className="p-5">Vous n'avez pas les permissions nécessaires pour accéder à cette page.</Text>
+        );
+    }
+
     const [teams, setTeams] = useState<Team[]>([]);
     const [teamMembers, setTeamMembers] = useState<{ [key: number]: { lead: User; workers: User[] } }>({});
     const [isLoadingTeams, setIsLoadingTeams] = useState(true); // Indicateur de chargement des équipes

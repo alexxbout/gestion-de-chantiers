@@ -3,20 +3,19 @@ import { FormControl, FormControlError, FormControlErrorIcon, FormControlErrorTe
 import { AlertCircleIcon, EyeIcon, EyeOffIcon } from "@/components/ui/icon";
 import { Image } from "@/components/ui/image";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
-import { FIREBASE_AUTH, db } from "@/config/firebaseConfig";
-import { CollectionName } from "@/types/database";
-import { RootStackParamList } from "@/types/navigation";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { useNavigation } from "expo-router";
+import { useUser } from "@/context/UserContext";
+import { FIREBASE_AUTH, db, findDocumentByField } from "@/firebase/api";
+import { CollectionName, User } from "@/types/database";
+import { useRouter } from "expo-router";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { useState } from "react";
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, View } from "react-native";
 
-type LoginNavigationProp = StackNavigationProp<RootStackParamList, "login">;
-
 const Login = () => {
-    const navigation = useNavigation<LoginNavigationProp>();
+    const router = useRouter();
+
+    const { setUser } = useUser();
 
     const [name, setName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
@@ -36,27 +35,44 @@ const Login = () => {
         try {
             setErrorMessage(null);
             setInvalid(false);
+
+            let user: User | null = null;
+
             if (isLogin) {
-                await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
+                const userCredential = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
+
+                user = await findDocumentByField("email", userCredential.user.email, CollectionName.USER);
             } else {
                 const userCredential = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
-                const user = userCredential.user;
+                const remoteUser = userCredential.user;
 
                 const usersSnapshot = await getDocs(collection(db, CollectionName.USER));
                 const lastUserId = usersSnapshot.docs.length > 0 ? Math.max(...usersSnapshot.docs.map((doc) => doc.data().id)) : 0;
                 const newUserId = lastUserId + 1;
 
-                await addDoc(collection(db, CollectionName.USER), {
+                if (!remoteUser.email) {
+                    throw new Error("Email is required");
+                }
+
+                user = {
                     id: newUserId,
                     role: "Equipier",
                     name: name,
-                    email: user.email,
-                    assignedChantiers: [],
-                    picture: null,
-                });
+                    email: remoteUser.email,
+                    assignedChantiers: []
+                };
+
+                await addDoc(collection(db, CollectionName.USER), user);
             }
 
-            navigation.replace("home");
+            if (user) {
+                localStorage.setItem("user", JSON.stringify(user));
+                setUser(user as User);
+
+                console.log("User logged in: ", user);
+            }
+
+            router.replace("/(tabs)/worksites");
         } catch (error: any) {
             setErrorMessage(error.message);
             setInvalid(true);

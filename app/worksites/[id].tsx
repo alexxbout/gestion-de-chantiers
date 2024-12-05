@@ -9,7 +9,7 @@ import { Image } from "@/components/ui/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Text } from "@/components/ui/text/index.web";
 import { formatDate } from "@/components/utils";
-import { findDocumentById } from "@/config/firebaseConfig";
+import { findDocumentById } from "@/firebase/api";
 import { CategoryEnum } from "@/types/components";
 import { CollectionName, Team, Tool, User, Vehicle, Worksite } from "@/types/database";
 import { BlurView } from "expo-blur";
@@ -42,7 +42,7 @@ const Layout = () => {
         const fetchWorksiteData = async () => {
             try {
                 setIsLoading(true);
-                const fetchedWorksite = await findDocumentById(Number.parseInt(id as string), CollectionName.WORKSITE);
+                const fetchedWorksite = await findDocumentById<Worksite>(Number.parseInt(id as string), CollectionName.WORKSITE);
                 setWorksite(fetchedWorksite as Worksite);
 
                 if (fetchedWorksite?.materials) {
@@ -56,7 +56,7 @@ const Layout = () => {
                 }
 
                 if (fetchedWorksite?.team) {
-                    const fetchedTeam = await findDocumentById(fetchedWorksite.team, CollectionName.TEAM);
+                    const fetchedTeam = await findDocumentById<Team>(fetchedWorksite.team, CollectionName.TEAM);
                     setTeam(fetchedTeam as Team);
 
                     if (fetchedTeam?.members.lead) {

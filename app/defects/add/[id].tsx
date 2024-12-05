@@ -4,7 +4,7 @@ import { Heading } from "@/components/ui/heading";
 import { Modal, ModalBackdrop, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@/components/ui/modal";
 import { Text } from "@/components/ui/text";
 import { Toast, ToastTitle, useToast } from "@/components/ui/toast";
-import { findDocumentById, updateDocument } from "@/config/firebaseConfig";
+import { findDocumentById, updateDocument } from "@/firebase/api";
 import { CollectionName, Defect, Worksite } from "@/types/database";
 import { BlurView } from "expo-blur";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
@@ -23,7 +23,7 @@ const Layout = () => {
 
     const [formValues, setFormValues] = useState<{ [key: string]: any }>({
         description: "",
-        date: "",
+        date: new Date().toISOString().split("T")[0],
     });
 
     const handleFormValuesChange = (values: { [key: string]: any }) => {
