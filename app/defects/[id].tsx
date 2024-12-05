@@ -10,23 +10,30 @@ import { ScrollView, View } from "react-native";
 const Layout = () => {
     const router = useRouter();
     const { id } = useLocalSearchParams();
-
     const [worksite, setWorksite] = useState<Worksite | null>(null);
+    const [isFetching, setIsFetching] = useState(false);
 
-    const fetchWorksite = async () => {
-        if (!id) return;
+    const fetchWorksites = async () => {
+        if (!id || isFetching) return;
+
+        setIsFetching(true);
+
+        console.log("Fetching worksite with id: ", id);
 
         try {
             const fetchedWorksite = await findDocumentById(Number.parseInt(id as string), CollectionName.WORKSITE);
             setWorksite(fetchedWorksite as Worksite);
         } catch (error) {
             console.error("Error fetching worksite: ", error);
+        } finally {
+            setTimeout(() => {
+                setIsFetching(false);
+            }, 1000);
         }
     };
 
     useFocusEffect(() => {
-        console.log("Component focused, fetching data...");
-        fetchWorksite();
+        fetchWorksites();
     });
 
     return (

@@ -23,7 +23,7 @@ const Layout = () => {
 
     const [formValues, setFormValues] = useState<{ [key: string]: any }>({
         description: "",
-        date: "",
+        date: new Date().toISOString().split("T")[0],
     });
 
     const handleFormValuesChange = (values: { [key: string]: any }) => {
