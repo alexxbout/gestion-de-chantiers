@@ -2,55 +2,66 @@
     {
         "id": 1,
         "model": "beton",
-        "period": {
-            "start": null,
-            "end": null
-        },
+        "periods": [
+            {
+                "start": "2024-10-15",
+                "end": "2025-01-14"
+            },
+            {
+                "start": "2025-02-01",
+                "end": "2025-02-26"
+            }
+        ],
         "status": "En fonction"
     },
     {
         "id": 2,
         "model": "camion",
-        "period": {
-            "start": null,
-            "end": null
-        },
+        "periods": [
+            {
+                "start": "2024-10-15",
+                "end": "2025-01-14"
+            },
+            {
+                "start": "2025-02-01",
+                "end": "2025-02-26"
+            }
+        ],
         "status": "En fonction"
     },
     {
         "id": 3,
         "model": "construction",
-        "period": {
-            "start": "2024-01-01T10:00:00.000Z",
-            "end": "2024-01-25T16:00:00.000Z"
-        },
+        "periods": [{
+            "start": "2024-12-01",
+            "end": "2025-01-10"
+        }],
         "status": "En fonction"
     },
     {
         "id": 4,
         "model": "destruction",
-        "period": {
-            "start": null,
-            "end": null
-        },
+        "periods": [
+            {
+                "start": "2024-10-01",
+                "end": "2024-10-21"
+            }
+        ],
         "status": "En fonction"
     },
     {
         "id": 5,
         "model": "grue",
-        "period": {
-            "start": null,
-            "end": null
-        },
+        "periods": [],
         "status": "En fonction"
     },
     {
         "id": 6,
         "model": "levage",
-        "period": {
-            "start": "2024-01-01T10:00:00.000Z",
-            "end": "2024-01-25T16:00:00.000Z"
-        },
+        "periods": [{
+            "start": "2024-01-01",
+            "end": "2024-01-25"
+        }],
         "status": "En maintenance"
     }
 ]

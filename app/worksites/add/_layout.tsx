@@ -5,7 +5,7 @@ import { AddIcon, CloseCircleIcon, Icon, SlashIcon } from "@/components/ui/icon"
 import { Image } from "@/components/ui/image";
 import { Input, InputField } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
-import { getAllDocuments, uploadDataToFirestore } from "@/firebase/api";
+import { getAllDocuments, updateDocument, uploadDataToFirestore } from "@/firebase/api";
 import { VehicleStatus } from "@/types/components";
 import { CollectionName, Team, Tool, Vehicle, Worksite, WorksiteStatus } from "@/types/database";
 import { useRouter } from "expo-router";
@@ -14,7 +14,7 @@ import { ScrollView, View } from "react-native";
 
 const Layout = () => {
     const router = useRouter();
-    
+
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
     const [tools, setTools] = useState<Tool[]>([]);
 
@@ -46,7 +46,7 @@ const Layout = () => {
 
     useEffect(() => {
         const { start_date, duration, team } = formValues;
-    
+
         if (!start_date || !duration) {
             const updatedVehicles = vehicles.map((vehicle) => ({
                 ...vehicle,
@@ -56,19 +56,26 @@ const Layout = () => {
             setSelectedVehicles([]);
             return;
         }
-    
+
         const startDate = new Date(start_date);
         const endDate = new Date(startDate);
         endDate.setDate(startDate.getDate() + parseInt(duration, 10));
-    
+
         const updatedVehicles = vehicles.map((vehicle) => {
-            const isAvailable = vehicle.status === VehicleStatus.AVAILABLE && (!vehicle.period.start || !vehicle.period.end || new Date(vehicle.period.end) < startDate || new Date(vehicle.period.start) > endDate);
+            const isAvailable =
+                vehicle.status === VehicleStatus.AVAILABLE &&
+                vehicle.periods.every((period) => {
+                    if (!period.start || !period.end) return true;
+                    const periodStart = new Date(period.start);
+                    const periodEnd = new Date(period.end);
+                    return periodEnd < startDate || periodStart > endDate;
+                });
             return { ...vehicle, isAvailable };
         });
-    
+
         setFilteredVehicles(updatedVehicles);
         setSelectedVehicles([]);
-    
+
         const updatedTeamOptions = teams.map((teamItem) => {
             const isAvailable = worksites.every((worksite) => {
                 const worksiteStart = new Date(worksite.startDate);
@@ -83,7 +90,7 @@ const Layout = () => {
             };
         });
         setTeamOptions(updatedTeamOptions);
-    
+
         const selectedTeam = updatedTeamOptions.find((option) => option.value === team);
         if (selectedTeam && selectedTeam.disabled) {
             setFormValues((prevValues) => ({
@@ -158,6 +165,33 @@ const Layout = () => {
         };
 
         sendWorksite(newWorksite);
+
+        const startDate = new Date(newWorksite.startDate);
+        const endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + newWorksite.duration);
+
+        const updatedVehicles = vehicles.map((vehicle) => {
+            if (selectedVehiclesIds.includes(vehicle.id)) {
+                return {
+                    ...vehicle,
+                    periods: [
+                        ...vehicle.periods,
+                        {
+                            start: startDate.toISOString(),
+                            end: endDate.toISOString(),
+                        },
+                    ],
+                    status: VehicleStatus.AVAILABLE,
+                };
+            }
+            return vehicle;
+        });
+
+        // for each vehicle, update the periods
+        updatedVehicles.forEach((vehicle) => {
+            updateDocument(vehicle.id, CollectionName.VEHICLE, vehicle);
+        });
+
     };
 
     const sendWorksite = async (worksite: Worksite) => {
@@ -169,7 +203,7 @@ const Layout = () => {
         } catch (error) {
             console.error("Error sending worksite:", error);
         }
-    }
+    };
 
     return (
         <ScrollView className="p-6 bg-white">

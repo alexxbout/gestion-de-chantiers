@@ -4,9 +4,9 @@
         "title": "Construction de logements collectifs",
         "description": "Construction de deux bâtiments résidentiels avec 30 appartements chacun.",
         "status": "En cours",
-        "startDate": "2024-11-15",
-        "duration": 60,
-        "location": "123 Rue des Lilas, Paris",
+        "startDate": "2025-02-01",
+        "duration": 25,
+        "location": "30 rue Gontier-Patin, Abbeville",
         "client": {
             "name": "Société ImmoLux",
             "phone": "+33 1 23 45 67 89"

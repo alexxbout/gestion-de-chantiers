@@ -58,11 +58,11 @@ export interface Worksite {
 export interface Vehicle {
     id: number; // Identifiant unique du véhicule
     model: VehicleCategoryEnum; // Modèle du véhicule
-    period: {
-        // Période de réservation
-        start: Date | null;
-        end: Date | null;
-    };
+    periods: {
+        // Périodes de réservation
+        start: Date;
+        end: Date;
+    }[];
     status: VehicleStatus; // Statut du véhicule
 }
 
