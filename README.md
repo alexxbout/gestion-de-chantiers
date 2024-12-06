@@ -1,5 +1,7 @@
 # Projet Application de Gestion de Chantiers
 
+![Logo](./images/app.png)
+
 ## **Réalisé par**  
 - Alexandre Boutinaud
 - Gaetan Peron
