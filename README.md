@@ -96,4 +96,20 @@ Vous pouvez utiliser les scripts suivants pour installer les dépendances et lan
 - install.sh : Installe les dépendances nécessaires pour le projet.
 - clean.sh : Nettoie les dépendances et les fichiers temporaires (utile si vous changez de branches et pour ne pas tout réinstaller).
 
+## Données
+
+Responsable : 
+- marie.durant@gmail.com
+
+Equipiers :
+- pierre.martin@gmail.com
+- sophie.lefevre@gmail.com
+- lucas.lefevre@gmail.com
+- thomas.lefevre@gmail.com
+- julie.lemoine@gmail.com
+- pauline.lemoine@gmail.com
+
+Chefs de chantiers :
+- jean.dupont@gmail.com
+
 ---
