@@ -4,8 +4,8 @@
         "title": "Construction de logements collectifs",
         "description": "Construction de deux bâtiments résidentiels avec 30 appartements chacun.",
         "status": "En cours",
-        "startDate": "2024-11-15",
-        "duration": 60,
+        "startDate": "2025-02-01",
+        "duration": 25,
         "location": "30 rue Gontier-Patin, Abbeville",
         "client": {
             "name": "Société ImmoLux",
